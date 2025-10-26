@@ -8,10 +8,13 @@ const theme = {
             ...DefaultTheme.colors,
             primary: '#4188DA',
             background: '#F8F9FF',
+            onBackground: "#191C20",
             card: '#F8F9FF',
             text: '#191C20',
             border: "#D9D9D9",
-            notification: "red"
+            notification: "red",
+            surface: '#F8F9FF',
+            onSurface: "#191C20",
         },
         fonts: {
             ...DefaultTheme.fonts,
@@ -42,10 +45,13 @@ const theme = {
         colors: {
             primary: '#4188DA',
             background: '#111111',
+            onBackground: "#E1E2E9",
             card: "#1D2742",
             text: "#E1E2E9",
             border: '#D9D9D9',
-            notification: "red"
+            notification: "red",
+            surface: '#1D2742',
+            onSurface: '#E1E2E9'
         },
         fonts: {
             ...DefaultTheme.fonts,

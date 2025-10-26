@@ -22,7 +22,7 @@ const AppTextField = ({ label, placeholder, ...props }: propTypes) => {
 
     return (
         <View style={styles(isDarkMode).container}>
-            <AppText text={label} textStyle={styles(isDarkMode).textStyle} />
+            <AppText text={label} textStyle={styles(isDarkMode).textStyle} fontSize={12} />
 
             <AppSpacer size={Constants.SPACE_SMALL} />
             <View>
@@ -41,10 +41,11 @@ const AppTextField = ({ label, placeholder, ...props }: propTypes) => {
 const styles = (isDarkMode: boolean) => StyleSheet.create({
     container: {
         width: '100%',
+        marginVertical: Constants.SPACE_SMALL
     },
 
     textStyle: {
-        fontFamily: 'poppins_regular',
+        fontFamily: 'poppins_medium',
         fontSize: RFValue(13),
         color: isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
     },
@@ -55,7 +56,7 @@ const styles = (isDarkMode: boolean) => StyleSheet.create({
         borderRadius: Constants.SPACE_SMALL,
         paddingHorizontal: Constants.SPACE_SMALL,
         fontSize: RFValue(13),
-        fontFamily: 'poppins_semibold',
+        fontFamily: 'poppins_regular',
         fontWeight: '200'
     }
 })
