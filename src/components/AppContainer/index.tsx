@@ -19,8 +19,9 @@ const AppContainer = ({ children }: AppContainerProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: DeviceUtils.SCREEN_WIDTH,
-    height: DeviceUtils.SCREEN_HEIGHT,
+    /*  width: DeviceUtils.SCREEN_WIDTH,
+     height: DeviceUtils.SCREEN_HEIGHT, */
+    flex: 1,
     padding: Constants.SPACE_SMALL,
   }
 })

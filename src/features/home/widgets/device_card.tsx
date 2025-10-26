@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 
 // components
 import { AppText, AppButton, AppSpacer } from '../../../components'
@@ -20,10 +20,12 @@ interface propTypes {
     onPress: () => void
 }
 
-const AssessmentCard = ({ title, buttonTitle, backgroundColor = Colors.primaryCore, onPress }: propTypes) => {
+const imageWidth = (DeviceUtils.SCREEN_WIDTH - ((Constants.SPACE_SMALL * 2) + (Constants.SPACE_MEDIUM * 2))) / 2
+
+const DevicesCard = ({ title, buttonTitle, backgroundColor = Colors.primaryCore, onPress }: propTypes) => {
     const isDarkMode = useTheme()
 
-    const imageWidth = (DeviceUtils.SCREEN_WIDTH - ((Constants.SPACE_SMALL * 2) + (Constants.SPACE_MEDIUM * 2))) / 2
+
 
     return (
         <View style={styles(isDarkMode, backgroundColor).container}>
@@ -44,7 +46,9 @@ const AssessmentCard = ({ title, buttonTitle, backgroundColor = Colors.primaryCo
 
             {/* image */}
             <View style={styles(isDarkMode).imageContainer}>
-                <Assessment width={imageWidth} height={imageWidth} />
+                <Image
+                    source={require('../../../assets/images/smart_watch.png')}
+                    style={styles(isDarkMode).image} />
             </View>
         </View>
     )
@@ -64,18 +68,24 @@ const styles = (
         },
         text: {
             fontFamily: "poppins_semibold",
-            color: Colors.neutral100
+            color: Colors.neutral0
         },
         imageContainer: {
 
         },
         buttonStyle: {
             borderRadius: Constants.SPACE_LARGE,
-            paddingHorizontal: Constants.SPACE_MEDIUM
+            paddingHorizontal: Constants.SPACE_MEDIUM,
+            borderWidth: 0
         },
         labelStyle: {
             color: Colors.primaryCore
+        },
+        image: {
+            width: imageWidth,
+            height: imageWidth,
+            resizeMode: "contain",
         }
     })
 
-export default AssessmentCard
+export default DevicesCard
