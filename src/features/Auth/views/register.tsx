@@ -1,5 +1,6 @@
 import { StyleSheet, ScrollView, View, TouchableOpacity } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
+import { useNavigation } from '@react-navigation/native'
 
 // components
 import { AppContainer, AppText, AppTextField, AppSpacer, AppButton } from '../../../components'
@@ -10,12 +11,16 @@ import { Colors, Constants, Theme } from '../../../shared/'
 // hooks
 import useIsDarkMode from '../../../hooks/useTheme'
 
+// navigation
+import { Routes } from '../../../navigation'
+
 interface propTypes {
     onPress: () => void
 }
 
 const RegisterPage = ({ onPress }: propTypes) => {
     const isDarkMode = useIsDarkMode()
+    const navigation = useNavigation()
 
     return (
         <ScrollView>
@@ -33,14 +38,16 @@ const RegisterPage = ({ onPress }: propTypes) => {
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <AppButton label='Sign Up' onPress={() => console.log("")} isPrimary />
+            <AppButton label='Sign Up' onPress={() => navigation.navigate('bottomNavigator')} isPrimary />
 
             <AppSpacer size={Constants.SPACE_SMALL} />
 
             {/* link to register  */}
             <View style={styles(isDarkMode).footerContainer}>
                 <AppText text="Already have an account ? " textStyle={styles(isDarkMode).footerSectionOne} fontSize={12} />
-                <TouchableOpacity onPress={() => onPress()}>
+                <TouchableOpacity onPress={() => {
+                    onPress()
+                }}>
                     <AppText text="Sign In" textStyle={styles(isDarkMode).footerSectionTwo} />
                 </TouchableOpacity>
             </View>

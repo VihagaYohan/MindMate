@@ -1,3 +1,6 @@
 export { default as AuthPage } from './Auth'
 export { default as SettingsPage } from './settings'
 export { default as OnboardingPage } from './onboarding'
+export { default as HomePage } from './home'
+export { default as JournalPage } from './journal'
+export { default as MoodPage } from './mood'

@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
 
 // components
 import { AppText } from '../'
@@ -15,6 +15,8 @@ interface propTypes {
     onPress: () => void,
     isPrimary?: boolean,
     showIcon?: boolean,
+    buttonStyle?: ViewStyle,
+    labelStyle?: TextStyle
 }
 
 const AppButton = (props: propTypes) => {
@@ -23,11 +25,13 @@ const AppButton = (props: propTypes) => {
     return (
         <TouchableOpacity onPress={props.onPress} style={{
             ...styles(isDarkTheme).container,
-            backgroundColor: props.isPrimary ? Colors.primaryCore : isDarkTheme ? Theme.darkTheme.colors.surface : Theme.lightTheme.colors.surface
+            backgroundColor: props.isPrimary ? Colors.primaryCore : isDarkTheme ? Theme.darkTheme.colors.surface : Theme.lightTheme.colors.surface,
+            ...props.buttonStyle
         }}>
             <AppText text={props.label} textStyle={{
                 ...styles(isDarkTheme).labelStyle,
-                color: props.isPrimary ? Colors.neutral100 : isDarkTheme ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
+                color: props.isPrimary ? Colors.neutral100 : isDarkTheme ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text,
+                ...props.labelStyle
             }} />
         </TouchableOpacity>
     )

@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 // navigation
-import { Routes } from './'
+import { Routes, BottomNavigator } from './'
 
 // pages
-import { OnboardingPage, AuthPage } from '../features'
+import { OnboardingPage, AuthPage, HomePage } from '../features'
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +15,7 @@ const RootStack = () => {
         }}>
             <Stack.Screen name={Routes.auth} component={AuthPage} />
             <Stack.Screen name={Routes.onboarding} component={OnboardingPage} />
+            <Stack.Screen name={Routes.bottomNav} component={BottomNavigator} />
         </Stack.Navigator>
     )
 }

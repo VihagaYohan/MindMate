@@ -1,6 +1,11 @@
 const Routes = {
     auth: "auth",
-    onboarding: "onboarding"
+    onboarding: "onboarding",
+    bottomNav: 'bottomNavigator',
+    home: "home",
+    journal: "journal",
+    mood: 'mood',
+    settings: 'settings'
 }
 
 export default Routes
