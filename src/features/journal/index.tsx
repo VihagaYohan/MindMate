@@ -13,8 +13,6 @@ import { useTheme } from '../../hooks'
 
 const JournalPage = () => {
     return (
-
-
         < AppLoader />
     )
 }

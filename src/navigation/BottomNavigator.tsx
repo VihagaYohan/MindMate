@@ -21,11 +21,12 @@ const Tab = createBottomTabNavigator()
 const RootBottomTab = () => {
     return (
         <Tab.Navigator initialRouteName={Routes.home} screenOptions={{
-            headerShown: false,
+            headerShown: true,
             tabBarActiveTintColor: Colors.primaryCore,
             tabBarInactiveTintColor: Colors.neutral70
         }}>
             <Tab.Screen name={Routes.home} component={HomePage} options={{
+                headerShown: false,
                 tabBarIcon: ({ focused, color, size }) => (
                     <View style={{
                         justifyContent: "center",
@@ -40,22 +41,8 @@ const RootBottomTab = () => {
                 tabBarLabelPosition: 'beside-icon'
             }} />
 
-            <Tab.Screen name={Routes.journal} component={JournalPage} options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                    <View style={{
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <NotebookPen color={focused ? Colors.primaryCore : color} size={size} />
-                    </View>
-                ),
-                tabBarLabel: ({ focused, color }) => (
-                    focused ? <AppText text='Journal' textStyle={{ ...styles.labelStyle, color: color }} /> : null
-                ),
-                tabBarLabelPosition: 'beside-icon'
-            }} />
-
             <Tab.Screen name={Routes.mood} component={MoodPage} options={{
+                headerShown: false,
                 tabBarIcon: ({ focused, color, size }) => (
                     <View style={{
                         justifyContent: "center",
@@ -66,6 +53,22 @@ const RootBottomTab = () => {
                 ),
                 tabBarLabel: ({ focused, color }) => (
                     focused ? <AppText text='Mood' textStyle={{ ...styles.labelStyle, color: color }} /> : null
+                ),
+                tabBarLabelPosition: 'beside-icon'
+            }} />
+
+            <Tab.Screen name={Routes.journal} component={JournalPage} options={{
+                headerShown: false,
+                tabBarIcon: ({ focused, color, size }) => (
+                    <View style={{
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <NotebookPen color={focused ? Colors.primaryCore : color} size={size} />
+                    </View>
+                ),
+                tabBarLabel: ({ focused, color }) => (
+                    focused ? <AppText text='Resources' textStyle={{ ...styles.labelStyle, color: color }} /> : null
                 ),
                 tabBarLabelPosition: 'beside-icon'
             }} />

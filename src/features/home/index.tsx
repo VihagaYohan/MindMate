@@ -126,7 +126,7 @@ const HomePage = () => {
 
             <DeviceCard
                 title={`Connect\nYour Devices`}
-                buttonTitle="Start Assessment"
+                buttonTitle="Connect Device"
                 backgroundColor={Colors.secondary95}
                 onPress={() => console.log("")} />
 
