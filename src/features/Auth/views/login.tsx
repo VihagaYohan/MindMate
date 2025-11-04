@@ -11,10 +11,11 @@ import { Colors, Constants, Theme } from '../../../shared/'
 import useIsDarkMode from '../../../hooks/useTheme'
 
 interface propTypes {
-    onPress: () => void
+    onPress: () => void,
+    onNavigate: () => void
 }
 
-const LoginPage = ({ onPress }: propTypes) => {
+const LoginPage = ({ onPress, onNavigate }: propTypes) => {
     const isDarkMode = useIsDarkMode()
 
     return (
@@ -33,7 +34,7 @@ const LoginPage = ({ onPress }: propTypes) => {
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <AppButton label='Sign In' onPress={() => console.log("")} isPrimary />
+            <AppButton label='Sign In' onPress={() => onNavigate()} isPrimary />
 
             <AppSpacer size={Constants.SPACE_SMALL} />
 

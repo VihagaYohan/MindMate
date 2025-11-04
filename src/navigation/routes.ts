@@ -8,13 +8,14 @@
     settings: 'settings'
 }*/
 enum Routes {
-  login = "Login",
-  register = "Register",
-  onboarding = "Onboarding",
-  bottomNav = "BottomNav",
-/*  home = "home",
-  mood = "mood",
-  settings = "settings"*/
+  login = 'Login',
+  register = 'Register',
+  onboarding = 'Onboarding',
+  bottomNav = 'BottomNav',
+  home = 'Home',
+  mood = 'Mood',
+  journal = 'Journal',
+  settings = 'Settings',
 }
 
-export default Routes
+export default Routes;

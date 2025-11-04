@@ -3,7 +3,7 @@ import { RFValue } from 'react-native-responsive-fontsize'
 import { useNavigation } from '@react-navigation/native'
 
 // components
-import { AppContainer, AppText, AppTextField, AppSpacer, AppButton } from '../../../components'
+import { AppText, AppTextField, AppSpacer, AppButton } from '../../../components'
 
 // shared
 import { Colors, Constants, Theme } from '../../../shared/'
@@ -14,12 +14,12 @@ import useIsDarkMode from '../../../hooks/useTheme'
 // navigation
 import { Routes } from '../../../navigation'
 
-interface propTypes {
+interface PropTypes {
     onPress: () => void
 }
 
-const RegisterPage = ({ onPress }: propTypes) => {
-    const isDarkMode = useIsDarkMode()
+const RegisterPage = ({ onPress }: PropTypes) => {
+    const isDarkMode: boolean = useIsDarkMode()
     const navigation = useNavigation()
 
     return (
@@ -38,7 +38,7 @@ const RegisterPage = ({ onPress }: propTypes) => {
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <AppButton label='Sign Up' onPress={() => navigation.navigate('bottomNavigator')} isPrimary />
+            <AppButton label='Sign Up' onPress={() => navigation.navigate(Routes.bottomNav,{})} isPrimary />
 
             <AppSpacer size={Constants.SPACE_SMALL} />
 

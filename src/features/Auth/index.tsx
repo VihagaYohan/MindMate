@@ -8,8 +8,13 @@ import { Constants } from '../../shared';
 
 // views
 import { LoginPage, RegisterPage } from './views';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/RootStackParamList.ts';
+import { Routes } from '../../navigation';
 
-const AuthPage = () => {
+type Props = NativeStackScreenProps<RootStackParamList, Routes>;
+
+const AuthPage = ({ navigation }: Props) => {
   const [login, setLogin] = useState<boolean>(false);
 
   const toggleForm = () => {
@@ -25,7 +30,10 @@ const AuthPage = () => {
           exiting={FadeOut}
           layout={Layout}
         >
-          <LoginPage onPress={() => toggleForm()} />
+          <LoginPage
+            onPress={() => toggleForm()}
+            onNavigate={() => navigation.navigate(Routes.bottomNav, {})}
+          />
         </Animated.View>
       ) : (
         <Animated.View
@@ -34,7 +42,9 @@ const AuthPage = () => {
           exiting={FadeOut}
           layout={Layout}
         >
-          <RegisterPage onPress={() => toggleForm()} />
+          <RegisterPage
+            onPress={() => toggleForm()}
+          />
         </Animated.View>
       )}
     </SafeAreaView>
