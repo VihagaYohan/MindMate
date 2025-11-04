@@ -1,0 +1,1 @@
+export {default as OnboardingList} from './onboardingList.ts'

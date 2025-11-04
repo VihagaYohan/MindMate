@@ -8,7 +8,7 @@ import { Theme } from '../../shared'
 import { useTheme } from '../../hooks'
 
 interface AppTextProps extends TextProps {
-  text: string;
+  text?: string;
   fontSize?: number,
   textStyle?: TextStyle;
 }

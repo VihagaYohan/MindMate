@@ -1,17 +1,18 @@
 import React from 'react';
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 // shared
-import { DeviceUtils, Constants } from '../../shared/'
+import {  Constants } from '../../shared/'
 
 interface AppContainerProps {
-  children: React.ReactNode
+  children: React.ReactNode,
+  containerStyle?: ViewStyle
 }
 
-const AppContainer = ({ children }: AppContainerProps) => {
+const AppContainer: React.FC<AppContainerProps> = ({ children, containerStyle }: AppContainerProps) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{...styles.container, ...containerStyle}}>
       {children}
     </SafeAreaView>
   )
@@ -19,8 +20,6 @@ const AppContainer = ({ children }: AppContainerProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    /*  width: DeviceUtils.SCREEN_WIDTH,
-     height: DeviceUtils.SCREEN_HEIGHT, */
     flex: 1,
     padding: Constants.SPACE_SMALL,
   }
