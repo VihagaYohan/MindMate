@@ -22,7 +22,7 @@ const RegisterPage = ({ onPress }: PropTypes) => {
     const isDarkMode: boolean = useIsDarkMode()
     const navigation = useNavigation()
 
-    return (
+  return (
         <ScrollView>
             <AppText text='Create Account' textStyle={styles(isDarkMode).titleStyle} />
             <AppText text="Sign up to continue" textStyle={{

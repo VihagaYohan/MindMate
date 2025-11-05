@@ -14,6 +14,7 @@ const theme = {
             border: "#D9D9D9",
             notification: "red",
             surface: '#F8F9FF',
+            surfaceVariant: '#F8F9FF',
             onSurface: "#191C20",
         },
         fonts: {
@@ -51,6 +52,7 @@ const theme = {
             border: '#D9D9D9',
             notification: "red",
             surface: '#1D2742',
+            surfaceVariant: '#1D2742',
             onSurface: '#E1E2E9'
         },
         fonts: {

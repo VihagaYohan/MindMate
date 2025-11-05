@@ -158,7 +158,7 @@ const styles = (isDarkMode: boolean, backgroundColor: string = Colors.neutral100
     },
     categoryTitle: {
         fontFamily: "poppins_medium",
-        color: Colors.neutral0
+        color: isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
     }
 })
 
