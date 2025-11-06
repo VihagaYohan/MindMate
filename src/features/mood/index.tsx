@@ -15,6 +15,9 @@ import { useTheme } from '../../hooks'
 // widgets
 import { PeriodPicker } from './widgets'
 
+// navigation
+import { Routes } from '../../navigation'
+
 const MoodPage = () => {
     const isDarkMode = useTheme()
     const navigation = useNavigation()
@@ -56,7 +59,7 @@ const MoodPage = () => {
             <AppButton
                 isPrimary
                 label="How are you feeling today?"
-                onPress={() => console.log('')}
+                onPress={() => navigation.navigate(Routes.moodEntry, {})}
                 buttonStyle={styles(isDarkMode).buttonStyle} />
         </AppContainer>
     )

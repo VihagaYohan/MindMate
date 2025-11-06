@@ -2,7 +2,7 @@ type OnboardingParams = {}
 
 type LoginParams = {}
 
-type  RegisterParams = {}
+type RegisterParams = {}
 
 type BottomNavParams = {}
 
@@ -14,6 +14,8 @@ type JournalParams = {}
 
 type SettingsParams = {}
 
+type MoodEntryParams = {}
+
 export type RootStackParamList = {
   Onboarding: OnboardingParams,
   Login: LoginParams,
@@ -22,5 +24,6 @@ export type RootStackParamList = {
   Home: HomeParams,
   Mood: MoodParams,
   Journal: JournalParams,
-  Settings: SettingsParams
+  Settings: SettingsParams,
+  MoodEntry: MoodEntryParams
 }

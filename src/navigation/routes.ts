@@ -1,21 +1,18 @@
-/*const Routes = {
-    auth: "auth",
-    onboarding: "onboarding",
-    bottomNav: 'bottomNavigator',
-    home: "home",
-    journal: "journal",
-    mood: 'mood',
-    settings: 'settings'
-}*/
 enum Routes {
   login = 'Login',
   register = 'Register',
   onboarding = 'Onboarding',
   bottomNav = 'BottomNav',
+
+  // bottom tab options
   home = 'Home',
   mood = 'Mood',
   journal = 'Journal',
   settings = 'Settings',
+
+  // other stack pages
+  moodEntry = 'MoodEntry'
+
 }
 
 export default Routes;
