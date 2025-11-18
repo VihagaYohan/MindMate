@@ -44,7 +44,7 @@ const MoodEntry = ({ navigation }: PropTypes) => {
                 return <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ChevronLeft size={30} color={isDarkMode ? Theme.darkTheme.colors.onSurface : Theme.lightTheme.colors.onSurface} />
                 </TouchableOpacity>
-            },
+            }
         })
     })
 
@@ -127,7 +127,10 @@ const MoodEntry = ({ navigation }: PropTypes) => {
 
                 <AppTextField label="" placeholder='Type here something' />
 
-                <AppButton label='Submit' onPress={() => console.log('mood submitted:', moodType)} isPrimary />
+                <AppButton
+                    label='Submit'
+                    onPress={() => console.log('mood submitted:', moodType)}
+                    isPrimary />
             </View>
 
         </AppContainer>

@@ -124,13 +124,6 @@ const HomePage = () => {
             </View>
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <DeviceCard
-                title={`Connect\nYour Devices`}
-                buttonTitle="Connect Device"
-                backgroundColor={Colors.secondary95}
-                onPress={() => console.log("")} />
-
-
         </AppContainer>
     )
 }

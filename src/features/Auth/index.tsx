@@ -32,7 +32,10 @@ const AuthPage = ({ navigation }: Props) => {
         >
           <LoginPage
             onPress={() => toggleForm()}
-            onNavigate={() => navigation.navigate(Routes.bottomNav, {})}
+            onActionPress={() => {
+
+              navigation.navigate(Routes.bottomNav, {})
+            }}
           />
         </Animated.View>
       ) : (

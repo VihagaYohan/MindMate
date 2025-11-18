@@ -16,6 +16,7 @@ const theme = {
             surface: '#F8F9FF',
             surfaceVariant: '#F8F9FF',
             onSurface: "#191C20",
+            error: '#BA1A1A'
         },
         fonts: {
             ...DefaultTheme.fonts,
@@ -53,7 +54,8 @@ const theme = {
             notification: "red",
             surface: '#1D2742',
             surfaceVariant: '#1D2742',
-            onSurface: '#E1E2E9'
+            onSurface: '#E1E2E9',
+            error: '#BA1A1A'
         },
         fonts: {
             ...DefaultTheme.fonts,

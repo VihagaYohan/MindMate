@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
     return (
         <Stack.Navigator
-            initialRouteName={Routes.bottomNav}
+            initialRouteName={Routes.login}
             screenOptions={{
                 headerShown: false
             }}>
