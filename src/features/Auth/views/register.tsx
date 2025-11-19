@@ -22,7 +22,7 @@ const RegisterPage = ({ onPress }: PropTypes) => {
     const isDarkMode: boolean = useIsDarkMode()
     const navigation = useNavigation()
 
-  return (
+    return (
         <ScrollView>
             <AppText text='Create Account' textStyle={styles(isDarkMode).titleStyle} />
             <AppText text="Sign up to continue" textStyle={{
@@ -38,7 +38,10 @@ const RegisterPage = ({ onPress }: PropTypes) => {
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <AppButton label='Sign Up' onPress={() => navigation.navigate(Routes.bottomNav,{})} isPrimary />
+            <AppButton
+                label='Sign Up'
+                onPress={() => navigation.navigate(Routes.bottomNav, {})}
+                isPrimary />
 
             <AppSpacer size={Constants.SPACE_SMALL} />
 
@@ -58,12 +61,12 @@ const RegisterPage = ({ onPress }: PropTypes) => {
 const styles = (isDarkMode: boolean) => StyleSheet.create({
     titleStyle: {
         fontFamily: "poppins_bold",
-        fontSize: RFValue(20),
+        fontSize: RFValue(24),
         color: Colors.primaryCore
     },
     subTitle: {
         fontFamily: 'poppins_regular',
-        fontSize: RFValue(12),
+        fontSize: RFValue(15),
         fontWeight: "700",
         color: isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
     },

@@ -13,6 +13,6 @@ export { default as AppFormError } from './widgets/form/app_form_error.tsx'
 export { default as AppFormButton } from './widgets/form/app_form_button.tsx'
 
 // services
-export { default as ServerResponse } from './services/response/serverResponse.ts'
-export { default as ListResponse } from './services/response/serverResponse.ts'
-export { default as ErrorResponse } from './services/response/errorResponse.ts'
+export { default as ServerResponse } from '../services/response/serverResponse.ts'
+export { default as ListResponse } from '../services/response/serverResponse.ts'
+export { default as ErrorResponse } from '../services/response/errorResponse.ts'

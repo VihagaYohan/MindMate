@@ -50,7 +50,6 @@ const AppFormField = ({
                 onBlur={() => setFieldTouched(name)}
                 onChangeText={handleChange(name)}
                 value={(values as Record<string, any>)?.[name]?.toString() ?? ''}
-                inputMode={inputMode}
                 secureTextEntry={secureTextEntry}
                 {...otherProps} />
 
@@ -62,7 +61,7 @@ const AppFormField = ({
 
 const styles = (isDarkTheme: boolean) => StyleSheet.create({
     textStyle: {
-        fontFamily: 'poppins-medium',
+        fontFamily: 'poppins_medium',
         fontSize: RFValue(13),
         color: isDarkTheme ? Theme.darkTheme.colors.text :
             Theme.lightTheme.colors.text

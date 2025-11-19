@@ -22,7 +22,10 @@ const AppTextField = ({ label, placeholder, ...props }: propTypes) => {
 
     return (
         <View style={styles(isDarkMode).container}>
-            <AppText text={label} textStyle={styles(isDarkMode).textStyle} fontSize={12} />
+            <AppText
+                text={label}
+                textStyle={styles(isDarkMode).textStyle}
+                fontSize={12} />
 
             <AppSpacer size={Constants.SPACE_SMALL} />
             <View>

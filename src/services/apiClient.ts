@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios'
-import { Endpoint } from './'
+import Endpoint from './endpoints'
 
 const axiosClient: AxiosInstance = axios.create({
     baseURL: new Endpoint().baseUrl,

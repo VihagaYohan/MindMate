@@ -1,16 +1,23 @@
 import { StyleSheet, ScrollView, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
-import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { useNavigation } from '@react-navigation/native'
 
 // components
-import { AppContainer, AppText, AppTextField, AppSpacer, AppButton } from '../../../components'
+import { AppText, AppSpacer, AppButton } from '../../../components'
 
 // shared
 import { Colors, Constants, Theme, AppForm, AppFormField, AppFormButton } from '../../../shared/'
 
 // hooks
 import useIsDarkMode from '../../../hooks/useTheme'
+
+// services
+import { AuthService } from '../../../services'
+
+// navigation
+import { Routes } from '../../../navigation'
+
 
 interface propTypes {
     onPress: () => void,
@@ -19,12 +26,22 @@ interface propTypes {
 
 // form validation
 const validation = Yup.object().shape({
-    email: Yup.string().email("Invalid email format").label("Email"),
+    email: Yup.string().email("Invalid email format").label("Email").required('Email is required'),
     password: Yup.string().min(6, 'Password at-least have 6 characters').required('Password is required')
 })
 
 const LoginPage = ({ onPress, onActionPress }: propTypes) => {
     const isDarkMode = useIsDarkMode()
+    const navigation = useNavigation<any>()
+
+    const handleLogin = async (values: { email: string, password: string }) => {
+        const authService = new AuthService()
+        const result = await authService.userLogin(values)
+
+        if (result.statusCode === 200) {
+            navigation.navigate(Routes.bottomNav)
+        }
+    }
 
     return (
         <ScrollView>
@@ -41,11 +58,11 @@ const LoginPage = ({ onPress, onActionPress }: propTypes) => {
 
                 <AppForm
                     initialValues={{
-                        email: "",
-                        password: ""
+                        email: "vihagayohan94@gmail.com",
+                        password: "Batman"
                     }}
                     validationSchema={validation}
-                    onSubmit={values => console.log(values)}>
+                    onSubmit={values => handleLogin(values)}>
 
                     <AppFormField
                         name="email"
@@ -88,12 +105,12 @@ const styles = (isDarkMode: boolean) => StyleSheet.create({
     },
     titleStyle: {
         fontFamily: "poppins_bold",
-        fontSize: RFValue(20),
+        fontSize: RFValue(24),
         color: Colors.primaryCore
     },
     subTitle: {
         fontFamily: 'poppins_regular',
-        fontSize: RFValue(12),
+        fontSize: RFValue(15),
         fontWeight: "700",
         color: isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
     },
