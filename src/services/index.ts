@@ -2,6 +2,7 @@ export { default as ApiClient } from './apiClient'
 export { default as Endpoint } from './endpoints'
 export { default as AuthService } from './auth'
 export { default as CategoryService } from './categories'
+export { default as UserService } from './user'
 
 
 // responses

@@ -1,13 +1,16 @@
 import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage'
 
-interface savePayload {
+export interface savePayload {
     key: string,
     value: any
 }
 
 // set item
 const storeItem = async (payload: savePayload) => {
-    await RNSecureStorage.setItem(payload.key, JSON.stringify(payload.value), { accessible: ACCESSIBLE.WHEN_UNLOCKED })
+    await RNSecureStorage.setItem(
+        payload.key,
+        JSON.stringify(payload.value),
+        { accessible: ACCESSIBLE.WHEN_UNLOCKED })
 }
 
 // get item

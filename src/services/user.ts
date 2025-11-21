@@ -7,51 +7,45 @@ import Endpoint from './endpoints'
 
 // shared
 import { ErrorResponse, ServerResponse, Storage } from '../shared'
-import { savePayload } from '../shared/utils/Storage'
 
 // model
-import { User, Token } from '../data/models'
+import { User, Token, Profile } from '../data/models'
 
-
-interface LoginRequest {
-    email: string
-    password: string
-}
-
-
-export interface LoginResponse {
-    user: User,
-    token: Token,
+export interface ProfileResponse {
     message: string,
-    success: boolean
+    success: boolean,
+    data: Profile
 }
 
-class AuthService {
+class UserService {
     endpoint: Endpoint
 
     constructor() {
-        this.endpoint = new Endpoint();
+        this.endpoint = new Endpoint()
     }
 
-    // login 
-    userLogin = async (
-        request: LoginRequest): Promise<ServerResponse<LoginResponse | ErrorResponse>> => {
+    // get current-user
+    currentUser = async (): Promise<ServerResponse<ProfileResponse | ErrorResponse>> => {
         try {
-            const result: AxiosResponse<LoginResponse> = await ApiClient({
-                url: this.endpoint.login,
-                method: 'post',
-                data: request
+            const result: AxiosResponse<ProfileResponse> = await ApiClient({
+                url: this.endpoint.profile,
+                method: 'get',
+                params: {
+                    'userId': '68e3f2b9c7f81302079d0046'
+                }
             })
 
-            const response = new ServerResponse<LoginResponse>(
+            console.log(result)
+
+            const response = new ServerResponse<ProfileResponse>(
                 true,
                 result.data.message,
-                result.data)
-            await Storage.storeItem({ key: 'user', value: response })
+                result.data
+            )
             return response
 
         } catch (error) {
-            const axiosError = error as AxiosError<ErrorResponse>;
+            const axiosError = error as AxiosError<ErrorResponse>
 
             if (axiosError.response) {
                 // server returned an error response
@@ -69,8 +63,7 @@ class AuthService {
                     { message: "No response" } as ErrorResponse,
                     400
                 )
-            }
-            else {
+            } else {
                 // something else happened during setup
                 return new ServerResponse<ErrorResponse>(
                     false,
@@ -83,4 +76,5 @@ class AuthService {
     }
 }
 
-export default AuthService
+export default UserService
+

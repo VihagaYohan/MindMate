@@ -1,13 +1,15 @@
+import React, { useState } from 'react'
 import { StyleSheet, ScrollView, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import * as Yup from 'yup'
 import { useNavigation } from '@react-navigation/native'
 
 // components
-import { AppText, AppSpacer, AppButton } from '../../../components'
+import { AppText, AppSpacer, AppButton, AppLoader } from '../../../components'
 
 // shared
-import { Colors, Constants, Theme, AppForm, AppFormField, AppFormButton } from '../../../shared/'
+import { Colors, Constants, Theme, AppForm, AppFormField, AppFormButton, Storage } from '../../../shared/'
+import { savePayload } from '../../../shared/utils/Storage'
 
 // hooks
 import useIsDarkMode from '../../../hooks/useTheme'
@@ -17,6 +19,9 @@ import { AuthService } from '../../../services'
 
 // navigation
 import { Routes } from '../../../navigation'
+
+// store
+import { useStore } from '../../../store'
 
 
 interface propTypes {
@@ -33,14 +38,27 @@ const validation = Yup.object().shape({
 const LoginPage = ({ onPress, onActionPress }: propTypes) => {
     const isDarkMode = useIsDarkMode()
     const navigation = useNavigation<any>()
+    const [loading, setLoading] = useState<boolean>(false)
+
 
     const handleLogin = async (values: { email: string, password: string }) => {
+        setLoading(true)
         const authService = new AuthService()
         const result = await authService.userLogin(values)
 
+        setLoading(false)
         if (result.statusCode === 200) {
+            console.log(result)
             navigation.navigate(Routes.bottomNav)
         }
+
+        setLoading(false)
+    }
+
+    if (loading) {
+        return (
+            <AppLoader />
+        )
     }
 
     return (
