@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import Animated, {
   SharedValue,
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 // components
 import { AppContainer } from '../../components';
 // widgets
@@ -21,9 +21,11 @@ import { Routes } from '../../navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/RootStackParamList.ts';
 
-type Props  = NativeStackScreenProps<RootStackParamList, Routes>
+const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList)
 
-const OnboardingPage = ({navigation}: Props) => {
+type Props = NativeStackScreenProps<RootStackParamList, Routes>
+
+const OnboardingPage = ({ navigation }: Props) => {
   const translateX: SharedValue<number> = useSharedValue<number>(0);
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
@@ -37,7 +39,7 @@ const OnboardingPage = ({navigation}: Props) => {
 
   return (
     <AppContainer>
-      <Animated.FlatList
+      <AnimatedFlatlist
         keyExtractor={(_, index) => `onboarding_item_${index}`}
         data={OnboardingList}
         horizontal
@@ -64,7 +66,7 @@ const OnboardingPage = ({navigation}: Props) => {
         </View>
         <SwipeController
           title='Next'
-          onPress={() => navigation.navigate(Routes.login,{})}
+          onPress={() => navigation.navigate(Routes.login, {})}
           translateX={translateX}
         />
       </View>

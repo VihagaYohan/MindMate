@@ -12,8 +12,8 @@ import { useTheme } from '../../hooks'
 const SIZE = 100
 
 interface propTypes {
-    firstName: string
-    lastName: string
+    firstName?: string
+    lastName?: string
 }
 
 const AppAvatar = ({ firstName = "", lastName = "" }: propTypes) => {

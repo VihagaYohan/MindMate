@@ -35,8 +35,6 @@ class UserService {
                 }
             })
 
-            console.log(result)
-
             const response = new ServerResponse<ProfileResponse>(
                 true,
                 result.data.message,
