@@ -59,6 +59,7 @@ const SettingsPage = () => {
     }
 
     const OptionField = ({ iconName, label, onPress, isLastItem = false }: optionType) => {
+        const iconColor = isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
         return (
             <Pressable
                 onPress={() => onPress()}>
@@ -66,8 +67,8 @@ const SettingsPage = () => {
 
                     <View style={styles(isDarkMode).iconContainer}>
                         {iconName === "Heart" ?
-                            <Heart size={ICON_SIZE} style={styles(isDarkMode).iconStyle} />
-                            : iconName === "Trash" ? <Trash size={ICON_SIZE} style={styles(isDarkMode).iconStyle} />
+                            <Heart size={ICON_SIZE} style={styles(isDarkMode).iconStyle} color={iconColor} />
+                            : iconName === "Trash" ? <Trash size={ICON_SIZE} style={styles(isDarkMode).iconStyle} color={iconColor} />
                                 : <LogOut size={ICON_SIZE} style={styles(isDarkMode).iconStyle} color={Theme.lightTheme.colors.error} />}
 
                         <AppText
@@ -77,7 +78,7 @@ const SettingsPage = () => {
                     </View>
 
                     <View style={styles(isDarkMode).buttonContainer}>
-                        <ChevronRight size={ICON_SIZE} />
+                        <ChevronRight size={ICON_SIZE} color={iconColor} />
                     </View>
 
                 </View>
