@@ -1,7 +1,8 @@
 type stateType = {
     loading: boolean,
     isError: boolean,
-    errorMessage: string
+    errorMessage: string,
+    changeLoadingState: () => void
 }
 
 export default stateType

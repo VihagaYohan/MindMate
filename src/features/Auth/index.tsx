@@ -30,12 +30,6 @@ const AuthPage = ({ navigation }: Props) => {
     setLogin(prev => !prev);
   };
 
-  if (loading) {
-    return (
-      <AppLoader />
-    )
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       {login ? (

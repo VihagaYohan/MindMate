@@ -1,4 +1,4 @@
-import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
+import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle, ActivityIndicator } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useFormikContext } from 'formik'
 
@@ -11,6 +11,9 @@ import { Colors, Constants, Theme } from '../../'
 // hooks
 import { useTheme } from '../../../hooks'
 
+// store
+import { StateType, useStore } from '../../../store'
+
 interface propTypes {
     label: string,
     isPrimary?: boolean,
@@ -22,18 +25,25 @@ interface propTypes {
 const AppFormButton = (props: propTypes) => {
     const isDarkTheme = useTheme()
     const { handleSubmit } = useFormikContext()
+    const loadingState = useStore((state) => (state as StateType).loading)
 
     return (
         <TouchableOpacity onPress={handleSubmit} style={{
             ...styles(isDarkTheme).container,
             backgroundColor: props.isPrimary ? Colors.primaryCore : isDarkTheme ? Theme.darkTheme.colors.surface : Theme.lightTheme.colors.surface,
             ...props.buttonStyle
-        }}>
-            <AppText text={props.label} textStyle={{
-                ...styles(isDarkTheme).labelStyle,
-                color: props.isPrimary ? Colors.neutral100 : isDarkTheme ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text,
-                ...props.labelStyle
-            }} />
+        }}
+            disabled={loadingState}>
+            {loadingState === true ? (
+                <ActivityIndicator size="small" color={Theme.darkTheme.colors.text} />
+            ) : (
+                <AppText text={props.label} textStyle={{
+                    ...styles(isDarkTheme).labelStyle,
+                    color: props.isPrimary ? Colors.neutral100 : isDarkTheme ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text,
+                    ...props.labelStyle
+                }} />
+            )}
+
         </TouchableOpacity>
     )
 }

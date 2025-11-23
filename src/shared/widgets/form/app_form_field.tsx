@@ -74,7 +74,8 @@ const styles = (isDarkTheme: boolean) => StyleSheet.create({
         paddingHorizontal: Constants.SPACE_SMALL,
         fontSize: RFValue(13),
         fontFamily: 'poppins_regular',
-        fontWeight: '200'
+        fontWeight: '200',
+        color: isDarkTheme ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
     }
 })
 

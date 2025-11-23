@@ -13,13 +13,13 @@ import { savePayload } from '../shared/utils/Storage'
 import { User, Token } from '../data/models'
 
 
-interface LoginRequest {
+interface AuthRequest {
     email: string
     password: string
 }
 
 
-export interface LoginResponse {
+export interface AuthResponse {
     user: User,
     token: Token,
     message: string,
@@ -33,17 +33,67 @@ class AuthService {
         this.endpoint = new Endpoint();
     }
 
+    // register
+    userRegister = async (
+        request: AuthRequest
+    ): Promise<ServerResponse<AuthResponse | ErrorResponse>> => {
+
+        try {
+            const result: AxiosResponse<AuthResponse> = await ApiClient({
+                url: this.endpoint.register,
+                method: 'post',
+                data: request
+            })
+
+            const response = new ServerResponse<AuthResponse>(
+                true,
+                result.data.message,
+                result.data
+            )
+            await Storage.storeItem({ key: 'user', value: response })
+            return response
+        } catch (error) {
+            const axiosError = error as AxiosError<ErrorResponse>
+
+            if (axiosError.response) {
+                // server returned and error response
+                return new ServerResponse<ErrorResponse>(
+                    false,
+                    axiosError.response.data?.message || "Request failed",
+                    axiosError.response.data,
+                    axiosError.response.data.statusCode
+                )
+            } else if (axiosError.request) {
+                // request was made but no response
+                return new ServerResponse<ErrorResponse>(
+                    false,
+                    "No response from server. Check your network or API server",
+                    { message: "No response" } as ErrorResponse,
+                    400
+                )
+            } else {
+                // something else happend during setup
+                return new ServerResponse<ErrorResponse>(
+                    false,
+                    axiosError.message || "Unexpected error occured",
+                    { message: axiosError.message } as ErrorResponse,
+                    500
+                )
+            }
+        }
+    }
+
     // login 
     userLogin = async (
-        request: LoginRequest): Promise<ServerResponse<LoginResponse | ErrorResponse>> => {
+        request: AuthRequest): Promise<ServerResponse<AuthResponse | ErrorResponse>> => {
         try {
-            const result: AxiosResponse<LoginResponse> = await ApiClient({
+            const result: AxiosResponse<AuthResponse> = await ApiClient({
                 url: this.endpoint.login,
                 method: 'post',
                 data: request
             })
 
-            const response = new ServerResponse<LoginResponse>(
+            const response = new ServerResponse<AuthResponse>(
                 true,
                 result.data.message,
                 result.data)
