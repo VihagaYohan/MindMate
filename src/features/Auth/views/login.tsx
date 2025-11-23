@@ -45,6 +45,7 @@ const LoginPage = ({ onPress, onActionPress }: propTypes) => {
         setLoading(true)
         const authService = new AuthService()
         const result = await authService.userLogin(values)
+        //console.log(result)
 
         setLoading(false)
         if (result.statusCode === 200) {

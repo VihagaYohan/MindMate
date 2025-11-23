@@ -10,7 +10,7 @@ import { ErrorResponse, ServerResponse, Storage } from '../shared'
 import { savePayload } from '../shared/utils/Storage'
 
 // model
-import { User, Token } from '../data/models'
+import { User, Token, PersistentStorage } from '../data/models'
 
 
 interface AuthRequest {
@@ -23,7 +23,8 @@ export interface AuthResponse {
     user: User,
     token: Token,
     message: string,
-    success: boolean
+    success: boolean,
+    data: any
 }
 
 class AuthService {
@@ -50,7 +51,18 @@ class AuthService {
                 result.data.message,
                 result.data
             )
-            await Storage.storeItem({ key: 'user', value: response })
+
+            const { data } = response.data
+
+            const persistentStorage = new PersistentStorage(
+                data.token,
+                data.user._id,
+                data.user.email,
+                data.user.userType,
+                data.user.isActive
+            )
+
+            await Storage.storeItem({ key: 'user', value: persistentStorage })
             return response
         } catch (error) {
             const axiosError = error as AxiosError<ErrorResponse>
@@ -97,7 +109,18 @@ class AuthService {
                 true,
                 result.data.message,
                 result.data)
-            await Storage.storeItem({ key: 'user', value: response })
+
+            const { data } = response.data
+
+            const persistentStorage = new PersistentStorage(
+                data.token,
+                data.user._id,
+                data.user.email,
+                data.user.userType,
+                data.user.isActive
+            )
+
+            await Storage.storeItem({ key: 'user', value: persistentStorage })
             return response
 
         } catch (error) {

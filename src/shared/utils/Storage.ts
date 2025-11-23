@@ -24,8 +24,20 @@ const removeItem = async (key: string) => {
     await RNSecureStorage.removeItem(key)
 }
 
+// remove all data
+const removeAllData = async () => {
+    await RNSecureStorage.clear()
+}
+
+// get all keys
+const getAllKeys = async () => {
+    return await RNSecureStorage.getAllKeys()
+}
+
 export default {
     storeItem,
     getItem,
-    removeItem
+    removeItem,
+    removeAllData,
+    getAllKeys
 }
