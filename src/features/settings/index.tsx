@@ -37,7 +37,7 @@ interface optionType {
   isLastItem?: boolean;
 }
 
-const ICON_SIZE: number = 25;
+const ICON_SIZE: number = 23;
 
 const SettingsPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -103,7 +103,7 @@ const SettingsPage = () => {
 
             <AppText
               text={label}
-              fontSize={15}
+              fontSize={13}
               textStyle={styles(isDarkMode).optionLabel}
             />
           </View>
