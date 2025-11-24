@@ -5,6 +5,7 @@
  * @format
  */
 
+import { useEffect, useState } from 'react'
 import { StatusBar, useColorScheme, } from 'react-native';
 import {
   SafeAreaProvider,
@@ -18,6 +19,11 @@ import { AppNavigator } from './src/navigation'
 
 // shared
 import { Theme } from './src/shared/'
+import { getUserDetails } from './src/shared/services/persistentStorage'
+
+// models
+import { PersistentStorage } from './src/data/models'
+import { AppLoader } from './src/components';
 
 
 // create a client
@@ -39,11 +45,30 @@ function App() {
 }
 
 function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
-  return (
-    <AppNavigator />
-  );
+  useEffect(() => {
+    checkUserLoggedIn()
+  }, [])
+
+  const checkUserLoggedIn = async () => {
+    const result: PersistentStorage = await getUserDetails()
+    if (result && result.token && result.token.startsWith("Bearer")) {
+      console.log(`1 ${result.token}`)
+      setUserLoggedIn(true)
+    } else {
+      console.log(`2`)
+      setUserLoggedIn(false)
+    }
+    setLoading(false)
+  }
+
+  if (loading) {
+    return <AppLoader />
+  }
+
+  return (<AppNavigator userLoggedIn={userLoggedIn} />)
 }
 
 

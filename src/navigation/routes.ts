@@ -3,6 +3,7 @@ enum Routes {
   register = 'Register',
   onboarding = 'Onboarding',
   bottomNav = 'BottomNav',
+  appNav = "AppNav",
 
   // bottom tab options
   home = 'Home',

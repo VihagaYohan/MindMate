@@ -4,6 +4,8 @@ type LoginParams = {}
 
 type RegisterParams = {}
 
+type AppNav = {}
+
 type BottomNavParams = {}
 
 type HomeParams = {}
@@ -20,6 +22,7 @@ export type RootStackParamList = {
   Onboarding: OnboardingParams,
   Login: LoginParams,
   Register: RegisterParams,
+  AppNav: AppNav,
   BottomNav: BottomNavParams,
   Home: HomeParams,
   Mood: MoodParams,
