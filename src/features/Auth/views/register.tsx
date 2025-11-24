@@ -42,7 +42,6 @@ const RegisterPage = ({ onPress }: PropTypes) => {
         const authService = new AuthService()
         const result = await authService.userRegister(credentials)
 
-        console.log(result)
         if (result.statusCode !== 200) {
             useStore.setState({
                 loading: true,

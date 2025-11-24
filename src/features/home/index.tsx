@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, FlatList, View, Image } from 'react-native'
+import { useQuery } from '@tanstack/react-query'
 
 // components
 import { AppContainer, AppLoader, AppSpacer, AppText } from '../../components'
@@ -67,19 +68,21 @@ const HomePage = () => {
     ])
     const isDarkMode = useTheme()
 
-    useEffect(() => {
-        fetchCategories()
-    }, [])
-
     // fetch categories
     const fetchCategories = async () => {
-        /*         const categoryService = new CategoryService
-                const result = await categoryService.getServices()
-                console.log(result)
-                if (result != undefined) {
-                    setData(result)
-                } */
+        const categoryService = new CategoryService
+        const result = await categoryService.getServices()
+
+        const { data } = result.data
+        const response = data.data
+
+        return response
     }
+
+    const categoriesQuery = useQuery({
+        queryKey: ['categories'],
+        queryFn: fetchCategories
+    })
 
     const renderCategory = ({ item }: { item: Category }) => {
         return (
@@ -97,7 +100,6 @@ const HomePage = () => {
 
     return (
         <AppContainer>
-
             <WelcomeHeader />
 
             <AppSpacer size={Constants.SPACE_LARGE} />
@@ -118,7 +120,7 @@ const HomePage = () => {
                 <FlatList
                     horizontal
                     keyExtractor={(item: { _id: any }) => `categories${item._id}`}
-                    data={data}
+                    data={categoriesQuery.data}
                     renderItem={renderCategory}
                     showsHorizontalScrollIndicator={false} />
             </View>
