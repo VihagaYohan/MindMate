@@ -45,7 +45,7 @@ function App() {
 }
 
 function AppContent() {
-  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false)
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>()
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {

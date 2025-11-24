@@ -21,7 +21,7 @@ const RootStack = ({ userLoggedIn = false }: propTypes) => {
             screenOptions={{
                 headerShown: false
             }}>
-            {/*<Stack.Screen name={Routes.onboarding} component={OnboardingPage} />
+            {/* <Stack.Screen name={Routes.onboarding} component={OnboardingPage} />
             <Stack.Screen name={Routes.login} component={AuthPage} /> */}
             <Stack.Screen name={Routes.bottomNav} component={BottomNavigator} />
             <Stack.Screen name={Routes.moodEntry} component={MoodEntryPage} />
