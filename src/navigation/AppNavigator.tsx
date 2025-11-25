@@ -19,7 +19,8 @@ const RootStack = ({ userLoggedIn = false }: propTypes) => {
         <Stack.Navigator
             initialRouteName={Routes.bottomNav}
             screenOptions={{
-                headerShown: false
+                headerShown: false,
+                headerTransparent: true
             }}>
             {/* <Stack.Screen name={Routes.onboarding} component={OnboardingPage} />
             <Stack.Screen name={Routes.login} component={AuthPage} /> */}

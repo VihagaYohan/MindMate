@@ -1,11 +1,11 @@
-import React, { useLayoutEffect, useState } from 'react'
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
+import React, { useLayoutEffect, useState, useCallback, useMemo } from 'react'
+import { StyleSheet, View, TouchableOpacity, Text, LayoutChangeEvent } from 'react-native'
 import Animated, { useSharedValue, useAnimatedProps, withTiming, useAnimatedStyle, interpolate, interpolateColor } from 'react-native-reanimated'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { ChevronLeft } from 'lucide-react-native'
-import Slider from '@react-native-community/slider';
-import { Canvas, Circle, Path, Group } from '@shopify/react-native-skia'
+import Slider, { MarkerProps } from '@react-native-community/slider';
+import { Canvas, Circle, Path, Group, Skia } from '@shopify/react-native-skia'
 
 // components
 import { AppContainer, AppText, AppTextField, AppButton } from '../../../components'
@@ -23,35 +23,20 @@ import { AppHeader } from '../../../shared'
 import { RootStackParamList } from '../../../navigation/RootStackParamList'
 import { Routes } from '../../../navigation'
 
-type PropTypes = NativeStackScreenProps<RootStackParamList, Routes>
+type propTypes = NativeStackScreenProps<RootStackParamList, Routes>
 
-const AnimatedPath = Animated.createAnimatedComponent(Path)
-const AnimatedCircle = Animated.createAnimatedComponent(Circle)
+const eyeRadius: number = 15
+const AnimatedContainer = Animated.createAnimatedComponent(AppContainer)
 
-const MoodEntry = ({ navigation }: PropTypes) => {
+const MoodEntry = ({ navigation }: propTypes) => {
     const isDarkMode: boolean = useTheme()
     const [sliderState, setSliderState] = useState<number>(1.5)
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 })
 
-    // Shared value for animation (0 = sad, 1.5 = neutral, 3 = happy)
-    const moodValue = useSharedValue(1.5)
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: true,
-            title: '',
-            headerLeft: () => {
-                return <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <ChevronLeft size={30} color={isDarkMode ? Theme.darkTheme.colors.onSurface : Theme.lightTheme.colors.onSurface} />
-                </TouchableOpacity>
-            }
-        })
-    })
-
-    const circleRadius = Math.min(canvasSize.width, canvasSize.height) / 3
+    // shared value for animation (0 = sad, 1.5 = neutral, 3 = happy)
+    const moodValue = useSharedValue(3)
 
     const backgroundStyle = useAnimatedStyle(() => {
-
         const backgroundColors = interpolateColor(
             moodValue.value,
             [0, 2, 3],
@@ -62,111 +47,138 @@ const MoodEntry = ({ navigation }: PropTypes) => {
         })
     })
 
-    // Helper function to get mood type
-    const getMoodType = (value: number) => {
-        if (value < 1) return 'sad'
-        if (value < 2) return 'neutral'
-        return 'happy'
-    }
+    const onLayout = useCallback((event: LayoutChangeEvent) => {
+        const { width, height } = event.nativeEvent.layout
+        setCanvasSize({
+            width,
+            height
+        })
+    }, [])
 
-    const moodType = getMoodType(sliderState)
+    // calculate properties for face
+    const faceProps = useMemo(() => {
+        return {
+            cx: canvasSize.width / 2,
+            cy: canvasSize.height / 2,
+            r: canvasSize.width / 2.5
+
+        }
+    }, [canvasSize])
+
+
+    // draw mouth path
+    const mouthPath = useMemo(() => {
+        const path = Skia.Path.Make();
+
+        const cx = canvasSize.width / 2;
+        const cy = canvasSize.height / 1.55;   // baseline mouth y
+        const spread = canvasSize.width / 5;    // how wide the mouth is
+
+        const leftX = cx - spread;
+        const rightX = cx + spread;
+
+        // Mood arc height (0 = sad, 1.5 = neutral, 3 = happy)
+        const controlY = cy + (moodValue.value - 1.5) * -20;
+
+        path.moveTo(leftX, cy);
+        path.quadTo(cx, controlY, rightX, cy);
+
+        return path;
+    }, [canvasSize, moodValue.value]);
 
     const handleSliderChange = (value: number) => {
         setSliderState(value)
-        moodValue.value = withTiming(value, { duration: 300 })
-    }
-
-    const getMoodLabel = () => {
-        if (moodType === 'happy') return '😊 Happy'
-        if (moodType === 'neutral') return '😐 Neutral'
-        return '😢 Sad'
+        moodValue.value = withTiming(value, { duration: 500 })
     }
 
     return (
         <AppContainer>
-            <AppText text='How are you feeling today ?' textStyle={styles(isDarkMode).title} fontSize={18} />
 
-            {/* canvas drawing area */}
-            <Animated.View
-                style={[styles(isDarkMode).canvasContainer, backgroundStyle]}
-                onLayout={(e) => {
-                    const { width, height } = e.nativeEvent.layout
-                    setCanvasSize({ width, height })
-                }}
-            >
-                <Canvas style={{
+            <AppText
+                text='How are you feeling today ?'
+                textStyle={styles(isDarkMode).title}
+                fontSize={14} />
+
+            <View
+                style={{
                     flex: 1,
+                    borderWidth: 1,
+                    borderRadius: Constants.SPACE_MEDIUM,
+                    borderColor: Colors.neutral80
+                }}
+                onLayout={onLayout}>
+
+                <Canvas style={{
+                    width: canvasSize.width,
+                    height: canvasSize.height
                 }}>
-                    {/* {canvasSize.width > 0 && drawFace()} */}
+
+                    <Group>
+                        <Circle
+                            cx={faceProps.cx}
+                            cy={faceProps.cy}
+                            r={faceProps.r}
+                            color="yellow" />
+
+                        <Circle
+                            cx={canvasSize.width / 3}
+                            cy={canvasSize.height / 2.3}
+                            r={eyeRadius}
+                            color="black" />
+
+                        <Circle
+                            cx={canvasSize.width / 1.5}
+                            cy={canvasSize.height / 2.3}
+                            r={eyeRadius}
+                            color="black" />
+
+                        <Path
+                            path={mouthPath}
+                            color="black"
+                            style="stroke"
+                            strokeWidth={4}
+                            strokeJoin="round"
+                            strokeCap="round" />
+
+                    </Group>
                 </Canvas>
-            </Animated.View>
 
-            {/* bottom section */}
-            <View>
-                <Text style={styles(isDarkMode).moodLabel}>{getMoodLabel()}</Text>
-
-                <Slider
-                    style={{
-                        width: DeviceUtils.SCREEN_WIDTH - (Constants.SPACE_MEDIUM * 2),
-                        height: 40,
-                        alignSelf: 'center'
-                    }}
-                    value={sliderState}
-                    onValueChange={handleSliderChange}
-                    minimumValue={0}
-                    maximumValue={3}
-                    minimumTrackTintColor="#06B6D4"
-                    maximumTrackTintColor="#CBD5E1"
-                />
-
-                <View style={styles(isDarkMode).moodLabels}>
-                    <Text style={styles(isDarkMode).moodLabelText}>Sad</Text>
-                    <Text style={styles(isDarkMode).moodLabelText}>Neutral</Text>
-                    <Text style={styles(isDarkMode).moodLabelText}>Happy</Text>
-                </View>
-
-                <AppTextField label="" placeholder='Type here something' />
-
-                <AppButton
-                    label='Submit'
-                    onPress={() => console.log('mood submitted:', moodType)}
-                    isPrimary />
             </View>
+
+            <Slider
+                style={{
+                    width: DeviceUtils.SCREEN_WIDTH - (Constants.SPACE_MEDIUM * 2),
+                    height: 40,
+                    alignSelf: 'center'
+                }}
+                value={sliderState}
+                onValueChange={handleSliderChange}
+                minimumValue={0}
+                maximumValue={3}
+                minimumTrackTintColor={Colors.primaryCore}
+                maximumTrackTintColor={Colors.neutral80}
+                thumbTintColor={Colors.primaryCore}
+            />
+
+            <AppTextField
+                label=''
+                placeholder='Type what you feel here' />
+
+            <AppButton
+                isPrimary
+                label='Submit'
+                onPress={() => console.log("submit clicked")} />
 
         </AppContainer>
     )
+
 }
 
-const styles = (isDarkMode: boolean = false) => StyleSheet.create({
+const styles = (isDarkMode: boolean) => StyleSheet.create({
     title: {
-        alignSelf: 'center',
         fontFamily: 'poppins_semibold',
-        color: isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
-    },
-    canvasContainer: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: isDarkMode ? '#444' : '#e0e0e0',
-        borderRadius: 12,
-        marginVertical: 20,
-    },
-    moodLabel: {
-        textAlign: 'center',
-        fontSize: 20,
-        fontFamily: 'poppins_semibold',
-        marginBottom: 10,
-        color: isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text
-    },
-    moodLabels: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: Constants.SPACE_MEDIUM,
-        marginTop: 5,
-        marginBottom: 15
-    },
-    moodLabelText: {
-        color: 'black',//isDarkMode ? Theme.darkTheme.colors.textSecondary : Theme.lightTheme.colors.textSecondary,
-        fontSize: 12
+        color: isDarkMode ? Theme.darkTheme.colors.text : Theme.lightTheme.colors.text,
+        alignSelf: 'center'
     }
 })
 
