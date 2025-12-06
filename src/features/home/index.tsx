@@ -112,7 +112,7 @@ const HomePage = () => {
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <SubTitle title='Explore assessments' actionTitle='Show All' onPress={() => console.log('')} />
+            <SubTitle title='Explore Resources' actionTitle='Show All' onPress={() => console.log('')} />
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 

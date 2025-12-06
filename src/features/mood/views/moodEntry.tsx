@@ -7,6 +7,7 @@ import { ChevronLeft } from 'lucide-react-native'
 import Slider from '@react-native-community/slider';
 import { Canvas, Circle, Path, Group, Skia } from '@shopify/react-native-skia'
 import * as Yup from 'yup'
+import { useMutation } from '@tanstack/react-query'
 
 // components
 import { AppContainer, AppText, AppTextField, AppButton, AppSpacer } from '../../../components'
@@ -20,9 +21,18 @@ import { useTheme } from '../../../hooks'
 // shared
 import { AppHeader, AppForm, AppFormField, AppFormButton } from '../../../shared'
 
+// service
+import { MoodService } from '../../../services'
+
+// models
+import { AddMoodRequest } from '../../../services/moods'
+
 // navigation
 import { RootStackParamList } from '../../../navigation/RootStackParamList'
 import { Routes } from '../../../navigation'
+
+// store
+import { StateType, useStore } from '../../../store'
 
 type propTypes = NativeStackScreenProps<RootStackParamList, Routes>
 
@@ -57,6 +67,35 @@ const MoodEntry = ({ navigation }: propTypes) => {
             }
         })
     }, [])
+
+    const addMoodEntry = async (content: AddMoodRequest) => {
+        const moodService = new MoodService()
+        const result = await moodService.addMood(content)
+
+        console.log(result)
+    }
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: addMoodEntry
+    })
+
+    const handleAddingMood = (values: { moodInput: string }) => {
+        const payload: AddMoodRequest = {
+            level: moodValue.value,
+            description: moodValue.value == 0
+                ? 'sad'
+                : moodValue.value > 0 && moodValue.value <= 1.5 ?
+                    'neutral' : 'happy',
+            notes: values.moodInput
+        }
+        mutate(payload)
+
+        if (isPending) {
+            useStore((state) => {
+                (state as StateType).loading = true
+            })
+        }
+    }
 
     // shared value for animation (0 = sad, 1.5 = neutral, 3 = happy)
     const moodValue = useSharedValue(3)
@@ -196,7 +235,7 @@ const MoodEntry = ({ navigation }: propTypes) => {
                         moodInput: ""
                     }}
                     validationSchema={validation}
-                    onSubmit={value => console.log(value)}>
+                    onSubmit={value => handleAddingMood(value)}>
 
                     <AppFormField
                         name='moodInput'
