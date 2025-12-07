@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Video, BookOpenText } from 'lucide-react-native'
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack'
 
 // component
 import { AppText } from '../../../components'
@@ -15,6 +16,11 @@ import { Constants, Colors, Theme } from '../../../shared'
 // model
 import { Resource } from '../../../data/models'
 
+// navigation
+import { Routes, } from '../../../navigation/'
+import { RootStackParamList } from '../../../navigation/RootStackParamList'
+
+
 interface propTypes {
     item: Resource
 }
@@ -23,11 +29,16 @@ const ICON_SIZE: number = 20
 
 const ResouceCard = ({ item }: propTypes) => {
     const isDarkMode: boolean = useTheme()
-    const navigation = useNavigation()
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, Routes>>()
+    const params = useRoute()
 
 
     return (
-        <TouchableOpacity style={styles(isDarkMode).itemContainer}>
+        <TouchableOpacity
+            onPress={() => navigation.navigate(Routes.resourceDetails, {
+                id: item._id
+            })}
+            style={styles(isDarkMode).itemContainer}>
             <View style={styles(isDarkMode).thumbanilImageContainer}>
                 <Image
                     source={{ uri: item.thumbnail }}
@@ -84,7 +95,8 @@ const styles = (isDarkMode: boolean = false) => StyleSheet.create({
         fontFamily: 'poppins_semibold',
     },
     resourceTypeContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: "space-between"
     },
     resourceType: {
         fontFamily: 'poppoins_medium',

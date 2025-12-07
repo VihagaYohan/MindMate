@@ -13,7 +13,8 @@ enum Routes {
 
   // other stack pages
   moodEntry = 'MoodEntry',
-  resources = "Resources"
+  resources = "Resources",
+  resourceDetails = "ResourceDetails"
 
 }
 
