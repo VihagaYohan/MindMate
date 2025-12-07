@@ -18,6 +18,8 @@ type SettingsParams = {}
 
 type MoodEntryParams = {}
 
+type ResourcesParams = {}
+
 export type RootStackParamList = {
   Onboarding: OnboardingParams,
   Login: LoginParams,
@@ -28,5 +30,6 @@ export type RootStackParamList = {
   Mood: MoodParams,
   Journal: JournalParams,
   Settings: SettingsParams,
-  MoodEntry: MoodEntryParams
+  MoodEntry: MoodEntryParams,
+  Resources: ResourcesParams
 }

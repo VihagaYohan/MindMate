@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, FlatList, View, Image } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 // components
 import { AppContainer, AppLoader, AppSpacer, AppText } from '../../components'
@@ -20,9 +22,15 @@ import { CategoryService } from '../../services'
 // models
 import { Category } from '../../data/models'
 
+// navigation
+import { RootStackParamList } from '../../navigation/RootStackParamList'
+import { Routes } from '../../navigation'
+
 const SIZE = 80
 
-const HomePage = () => {
+type propTypes = NativeStackScreenProps<RootStackParamList, Routes>
+
+const HomePage = ({ navigation }: propTypes) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [data, setData] = useState<Category[]>([
         new Category(
@@ -112,7 +120,7 @@ const HomePage = () => {
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <SubTitle title='Explore Resources' actionTitle='Show All' onPress={() => console.log('')} />
+            <SubTitle title='Explore Resources' actionTitle='Show All' onPress={() => navigation.navigate(Routes.resources, {})} />
 
             <AppSpacer size={Constants.SPACE_MEDIUM} />
 

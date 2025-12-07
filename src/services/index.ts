@@ -4,6 +4,7 @@ export { default as AuthService } from './auth'
 export { default as CategoryService } from './categories'
 export { default as UserService } from './user'
 export { default as MoodService } from './moods'
+export { default as ResourcesService } from './resources'
 
 
 // responses

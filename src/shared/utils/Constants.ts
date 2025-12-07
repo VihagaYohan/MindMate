@@ -8,9 +8,16 @@ const keys = {
   user: 'user',
 }
 
+// resource types
+const resourceTypes = {
+  video: 'video',
+  article: 'article'
+}
+
 export default {
   SPACE_SMALL: small,
   SPACE_MEDIUM: medium,
   SPACE_LARGE: large,
-  KEYS: keys
+  KEYS: keys,
+  RESOURCETYPE: resourceTypes
 }

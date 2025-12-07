@@ -5,7 +5,7 @@ import { Routes, BottomNavigator } from './'
 import { RootStackParamList } from './RootStackParamList.ts';
 
 // pages
-import { OnboardingPage, AuthPage, MoodEntryPage } from '../features'
+import { OnboardingPage, AuthPage, MoodEntryPage, ResourcesPage } from '../features'
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -17,15 +17,18 @@ interface propTypes {
 const RootStack = ({ userLoggedIn = false }: propTypes) => {
     return (
         <Stack.Navigator
-            initialRouteName={Routes.bottomNav}
+            initialRouteName={Routes.login}
             screenOptions={{
                 headerShown: false,
                 headerTransparent: true
             }}>
-            {/* <Stack.Screen name={Routes.onboarding} component={OnboardingPage} />
-            <Stack.Screen name={Routes.login} component={AuthPage} /> */}
+            <Stack.Screen name={Routes.onboarding} component={OnboardingPage} />
+            <Stack.Screen name={Routes.login} component={AuthPage} />
             <Stack.Screen name={Routes.bottomNav} component={BottomNavigator} />
             <Stack.Screen name={Routes.moodEntry} component={MoodEntryPage} />
+            <Stack.Screen
+                name={Routes.resources}
+                component={ResourcesPage} />
         </Stack.Navigator>
     )
 }

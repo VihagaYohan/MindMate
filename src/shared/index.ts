@@ -13,6 +13,9 @@ export { default as AppFormField } from './widgets/form/app_form_field.tsx'
 export { default as AppFormError } from './widgets/form/app_form_error.tsx'
 export { default as AppFormButton } from './widgets/form/app_form_button.tsx'
 export { default as AppAvatar } from './widgets/app_avatar.tsx'
+export { default as HeaderBackButton } from './widgets/header_back_button.tsx'
+export { default as SearchFeild } from './widgets/search_field.tsx'
+export { default as SearchField } from './widgets/search_field.tsx'
 
 // services
 export { default as ServerResponse } from '../services/response/serverResponse.ts'

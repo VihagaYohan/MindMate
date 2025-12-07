@@ -24,7 +24,9 @@ const SubTitle = ({ title, actionTitle, onPress }: propTypes) => {
             <AppText text={title} fontSize={13} textStyle={styles(isDarkMode).titleStyle} />
 
             {actionTitle && (
-                <TouchableOpacity style={styles(isDarkMode).actionTitleContainer}>
+                <TouchableOpacity
+                    style={styles(isDarkMode).actionTitleContainer}
+                    onPress={() => onPress()}>
                     <AppText text={actionTitle} fontSize={10} textStyle={styles(isDarkMode).actionTitleStyle} />
                 </TouchableOpacity>
             )}
