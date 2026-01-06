@@ -10,6 +10,7 @@ import { AppText, AppSpacer, AppButton, AppLoader } from '../../../components'
 // shared
 import { Colors, Constants, Theme, AppForm, AppFormField, AppFormButton, Storage } from '../../../shared/'
 import { savePayload } from '../../../shared/utils/Storage'
+import { saveUserDetails } from '../../../shared/services/persistentStorage'
 
 // hooks
 import useIsDarkMode from '../../../hooks/useTheme'
@@ -22,6 +23,9 @@ import { Routes } from '../../../navigation'
 
 // store
 import { useStore } from '../../../store'
+
+// model
+import { PersistentStorage } from '../../../data/models'
 
 
 interface propTypes {
@@ -45,11 +49,9 @@ const LoginPage = ({ onPress, onActionPress }: propTypes) => {
         setLoading(true)
         const authService = new AuthService()
         const result = await authService.userLogin(values)
-        //console.log(result)
 
-        setLoading(false)
+        //setLoading(false)
         if (result.statusCode === 200) {
-            console.log(result)
             navigation.navigate(Routes.bottomNav)
         }
 

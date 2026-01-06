@@ -16,7 +16,6 @@ const checkForKey = async (key: string): Promise<boolean> => {
     return false
 }
 
-
 export const getUserDetails = async () => {
     try {
         const isAvailable = await checkForKey(Constants.KEYS.user)

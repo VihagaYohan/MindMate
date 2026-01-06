@@ -6,7 +6,7 @@ import { ApiClient } from '.'
 import Endpoint from './endpoints'
 
 // shared
-import { ErrorResponse, ServerResponse, Storage } from '../shared'
+import { ErrorResponse, ServerResponse, Storage, Constants } from '../shared'
 import { savePayload } from '../shared/utils/Storage'
 
 // model
@@ -62,7 +62,7 @@ class AuthService {
                 data.user.isActive
             )
 
-            await Storage.storeItem({ key: 'user', value: persistentStorage })
+            await Storage.storeItem({ key: Constants.KEYS.user, value: persistentStorage })
             return response
         } catch (error) {
             const axiosError = error as AxiosError<ErrorResponse>
@@ -120,7 +120,7 @@ class AuthService {
                 data.user.isActive
             )
 
-            await Storage.storeItem({ key: 'user', value: persistentStorage })
+            await Storage.storeItem({ key: Constants.KEYS.user, value: persistentStorage })
             return response
 
         } catch (error) {
