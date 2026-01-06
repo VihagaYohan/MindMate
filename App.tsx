@@ -54,7 +54,8 @@ function AppContent() {
 
   const checkUserLoggedIn = async () => {
     const result: PersistentStorage = await getUserDetails()
-    if (result && result.token && result.token.startsWith("Bearer")) {
+    console.log(result)
+    if (result && result.token.length > 0) {
       console.log(`1 ${result.token}`)
       setUserLoggedIn(true)
     } else {

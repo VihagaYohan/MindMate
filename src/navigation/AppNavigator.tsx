@@ -17,7 +17,7 @@ interface propTypes {
 const RootStack = ({ userLoggedIn = false }: propTypes) => {
     return (
         <Stack.Navigator
-            initialRouteName={Routes.login}
+            initialRouteName={userLoggedIn ? Routes.bottomNav : Routes.onboarding}
             screenOptions={{
                 headerShown: false,
                 headerTransparent: true
