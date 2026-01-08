@@ -26,6 +26,7 @@
     "react": "19.1.1",
     "react-native": "0.82.0",
     "react-native-blob-util": "^0.24.5",
+    "react-native-calendars": "^1.1313.0",
     "react-native-edge-to-edge": "^1.7.0",
     "react-native-gesture-handler": "^2.29.1",
     "react-native-gifted-charts": "^1.4.64",
