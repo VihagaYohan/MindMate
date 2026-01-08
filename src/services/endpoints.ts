@@ -5,7 +5,8 @@ class Endpoint {
     categories: string;
     profile: string;
     moods: string;
-    resources: string
+    resources: string;
+    moodEntry: string
 
     constructor() {
         this.baseUrl = "http://192.168.1.137:3000/api/v1/"
@@ -15,6 +16,7 @@ class Endpoint {
         this.profile = `${this.baseUrl}profiles/by-user`
         this.moods = `${this.baseUrl}user-moods`
         this.resources = `${this.baseUrl}resources`
+        this.moodEntry = `${this.baseUrl}user-moods`
     }
 }
 

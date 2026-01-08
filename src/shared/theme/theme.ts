@@ -7,7 +7,7 @@ const theme = {
         colors: {
             ...DefaultTheme.colors,
             primary: '#4188DA',
-            background: '#F8F9FF',
+            background: '#fff', //'#F8F9FF',
             onBackground: "#191C20",
             card: '#F8F9FF',
             text: '#191C20',

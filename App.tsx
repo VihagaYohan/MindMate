@@ -6,10 +6,12 @@
  */
 
 import { useEffect, useState } from 'react'
-import { StatusBar, useColorScheme, } from 'react-native';
+import {
+  StatusBar, useColorScheme, Platform,
+  UIManager
+} from 'react-native';
 import {
   SafeAreaProvider,
-  useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -28,6 +30,12 @@ import { AppLoader } from './src/components';
 
 // create a client
 const queryClient = new QueryClient();
+
+if (Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
