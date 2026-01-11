@@ -174,11 +174,7 @@ const SettingsPage = () => {
         label="Favorites"
         onPress={() => console.log('')}
       />
-      <OptionField
-        iconName="Trash"
-        label="Clear cache"
-        onPress={() => console.log('')}
-      />
+
       <OptionField
         iconName="LogOut"
         label="Log out"
