@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, FlatList, View, Image } from 'react-native'
+import { StyleSheet, FlatList, View, Image, TouchableOpacity, ScrollView } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -8,7 +8,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { AppContainer, AppLoader, AppSpacer, AppText } from '../../components'
 
 // shared
-import { Theme, Colors, Constants, SubTitle } from '../../shared'
+import { Theme, Colors, Constants, SubTitle, ResourceCard } from '../../shared'
 
 // hooks
 import { useTheme } from '../../hooks'
@@ -95,7 +95,10 @@ const HomePage = ({ navigation }: propTypes) => {
 
     const renderCategory = ({ item }: { item: Category }) => {
         return (
-            <View style={styles(isDarkMode).categoryContainer}>
+            <TouchableOpacity style={styles(isDarkMode).categoryContainer}
+                onPress={() => navigation.navigate(Routes.resources, {
+                    id: item._id
+                })}>
                 <View style={styles(isDarkMode).categoryImageContainer}>
                     <Image source={{ uri: item.imageUrl }} style={styles(isDarkMode, item.backgroundColor).categoryImage} resizeMode='contain' />
                 </View>
@@ -103,52 +106,51 @@ const HomePage = ({ navigation }: propTypes) => {
                 <AppSpacer size={Constants.SPACE_SMALL} />
 
                 <AppText text={item.title} textStyle={styles(isDarkMode).categoryTitle} fontSize={10} />
-            </View>
+            </TouchableOpacity>
         )
     }
 
     return (
         <AppContainer>
-            <WelcomeHeader />
+            <ScrollView
+                contentContainerStyle={{ paddingBottom: Constants.SPACE_LARGE }}
+                showsVerticalScrollIndicator={false}>
 
-            <AppSpacer size={Constants.SPACE_LARGE} />
+                <WelcomeHeader />
 
-            <AssessmentCard
-                title={`Track Your\nMental Health,\nTransform Your\nLife!`}
-                buttonTitle="Start Assessment"
-                backgroundColor={Colors.primaryCore}
-                onPress={() => console.log("")} />
+                <AppSpacer size={Constants.SPACE_LARGE} />
 
-            <AppSpacer size={Constants.SPACE_MEDIUM} />
+                <AssessmentCard
+                    title={`Track Your\nMental Health,\nTransform Your\nLife!`}
+                    buttonTitle="Start Assessment"
+                    backgroundColor={Colors.primaryCore}
+                    onPress={() => console.log("")} />
 
-            <SubTitle title='Explore Resources' actionTitle='Show All' onPress={() => navigation.navigate(Routes.resources, {})} />
+                <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <AppSpacer size={Constants.SPACE_MEDIUM} />
+                <SubTitle title='Explore Resources' actionTitle='Show All' onPress={() => navigation.navigate(Routes.resources, {})} />
 
-            <View>
-                <FlatList
-                    horizontal
-                    keyExtractor={(item: { _id: any }) => `categories${item._id}`}
-                    data={categoriesQuery.data}
-                    renderItem={renderCategory}
-                    showsHorizontalScrollIndicator={false} />
-            </View>
-            <AppSpacer size={Constants.SPACE_MEDIUM} />
+                <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            <SubTitle title='Recent' onPress={() => navigation.navigate(Routes.resources, {})} />
-            <AppSpacer size={Constants.SPACE_MEDIUM} />
+                <View>
+                    <FlatList
+                        horizontal
+                        keyExtractor={(item: { _id: any }) => `categories${item._id}`}
+                        data={categoriesQuery.data}
+                        renderItem={renderCategory}
+                        showsHorizontalScrollIndicator={false} />
+                </View>
+                <AppSpacer size={Constants.SPACE_MEDIUM} />
 
-            {getRandomItems().map((item: Resource, index) => {
-                return (
-                    <AppText
-                        text={item.title}
-                        fontSize={11}
-                        textStyle={{
-                            fontFamily: 'poppins_regular'
-                        }} />
-                )
-            })}
+                <SubTitle title='Recent' onPress={() => { return }} />
+                <AppSpacer size={Constants.SPACE_MEDIUM} />
 
+                {getRandomItems().map((item: Resource, index) => {
+                    return (
+                        <ResourceCard item={item} />
+                    )
+                })}
+            </ScrollView>
         </AppContainer>
     )
 }

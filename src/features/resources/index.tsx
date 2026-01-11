@@ -14,7 +14,7 @@ import { useRoute } from '@react-navigation/native'
 import { AppContainer, AppSpacer, AppText } from '../../components';
 
 // shared
-import { Colors, Constants, HeaderBackButton, SearchFeild } from '../../shared';
+import { Colors, Constants, HeaderBackButton, SearchFeild, ResourceCard } from '../../shared';
 
 // hooks
 import { useTheme } from '../../hooks';
@@ -29,8 +29,6 @@ import { ResourcesService } from '../../services';
 // models
 import { Resource } from '../../data/models';
 
-// widgets
-import { ResourceCard } from './widgets/';
 import categories from '../../data/categories';
 
 type propTypes = NativeStackScreenProps<RootStackParamList, Routes>;
@@ -59,7 +57,9 @@ const ResourcesPage = ({ navigation }: propTypes) => {
   }, []);
 
   useEffect(() => {
-    console.log(id)
+    if (id != null) {
+      setSelectedCategoryId(id)
+    }
     fetchResources()
   }, [selectedCategoryId])
 

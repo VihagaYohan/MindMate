@@ -5,20 +5,20 @@ import { Video, BookOpenText } from 'lucide-react-native'
 import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack'
 
 // component
-import { AppText } from '../../../components'
+import { AppText } from '../../components'
 
 // hooks
-import { useTheme } from '../../../hooks'
+import { useTheme } from '../../hooks'
 
 // constants
-import { Constants, Colors, Theme } from '../../../shared'
+import { Constants, Colors, Theme } from '../../shared'
 
 // model
-import { Resource } from '../../../data/models'
+import { Resource } from '../../data/models'
 
 // navigation
-import { Routes, } from '../../../navigation/'
-import { RootStackParamList } from '../../../navigation/RootStackParamList'
+import { Routes, } from '../../navigation/'
+import { RootStackParamList } from '../../navigation/RootStackParamList'
 
 
 interface propTypes {
