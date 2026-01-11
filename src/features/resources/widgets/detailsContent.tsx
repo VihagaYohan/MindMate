@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native'
 import { LinearGradient } from 'react-native-linear-gradient'
 
@@ -34,6 +34,10 @@ const DetailsContent: React.FC<propTypes> = ({
     const gradientColors = isDarkMode
         ? ['transparent', 'rgba(18, 18, 18, 0.7)', '#121212'] // Dark mode
         : ['transparent', 'rgba(255, 255, 255, 0.7)', '#FFFFFF']; // Light mode    
+
+    useEffect(() => {
+        console.log(content._id)
+    }, [])
 
     return (
         <View style={{

@@ -1,8 +1,9 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CurveType, LineChart } from 'react-native-gifted-charts';
 import { useQuery } from '@tanstack/react-query';
+import { LucideFilter } from 'lucide-react-native';
 
 // components
 import { AppButton, AppContainer, AppSpacer, AppText } from '../../components';
@@ -13,20 +14,18 @@ import { Colors, Constants } from '../../shared';
 // hooks
 import { useTheme } from '../../hooks';
 
-// widgets
-import { PeriodPicker } from './widgets';
-
 // navigation
 import { Routes } from '../../navigation';
 
 // service
 import { MoodService } from '../../services';
 
-// model
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 
 const MoodPage = () => {
   const isDarkMode = useTheme();
   const navigation = useNavigation();
+  const [visible, setVisible] = useState<boolean>(false);
 
   // fetch graph data for user mood
   const fetchGraphData = async () => {
@@ -44,37 +43,37 @@ const MoodPage = () => {
 
   const data = [
     {
-      value:10,
-      label: "10:42"
+      value: 10,
+      label: '10:42',
     },
     {
       value: 8,
-      label: "10:43"
+      label: '10:43',
     },
     {
       value: 5,
-      label: "10:44"
+      label: '10:44',
     },
     {
       value: 8,
-      label: "10:44"
+      label: '10:44',
     },
     {
       value: 5,
-      label: "10:45"
+      label: '10:45',
     },
     {
       value: 3,
-      label: "10:45"
+      label: '10:45',
     },
     {
       value: 7,
-      label: "10:46"
+      label: '10:46',
     },
     {
       value: 3,
-      label: "10:46"
-    }
+      label: '10:46',
+    },
   ];
 
   return (
@@ -86,7 +85,9 @@ const MoodPage = () => {
           fontSize={14}
         />
 
-        <PeriodPicker />
+        <Pressable onPress={() => setVisible(true)}>
+          <LucideFilter />
+        </Pressable>
       </View>
 
       <AppSpacer size={Constants.SPACE_MEDIUM} />
@@ -109,6 +110,16 @@ const MoodPage = () => {
         onPress={() => navigation.navigate(Routes.moodEntry, {})}
         buttonStyle={styles(isDarkMode).buttonStyle}
       />
+
+      <Modal visible={visible} animationType="slide">
+        <View style={styles(isDarkMode).modalContainer}>
+          <Calendar
+  onDayPress={day => {
+    console.log('selected day', day);
+  }}
+/>
+        </View>
+      </Modal>
     </AppContainer>
   );
 };
@@ -125,6 +136,11 @@ const styles = (isDarkMode: boolean) =>
     },
     buttonStyle: {
       borderRadius: Constants.SPACE_LARGE,
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 

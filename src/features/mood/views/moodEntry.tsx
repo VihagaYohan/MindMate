@@ -3,8 +3,12 @@ import {
   KeyboardAvoidingView,
   LayoutChangeEvent,
   Platform,
+  Pressable,
   StyleSheet,
-  TouchableOpacity,
+  ScrollView,
+  View,
+  Modal,
+  TouchableOpacity
 } from 'react-native';
 import Animated, {
   interpolate,
@@ -32,6 +36,7 @@ import {
   Colors,
   Constants,
   DeviceUtils,
+  ServerResponse,
   Theme,
 } from '../../../shared';
 
@@ -50,6 +55,7 @@ import { Routes } from '../../../navigation';
 
 // store
 import { StateType, useStore } from '../../../store';
+import { Mood } from '../../../data/models';
 
 type propTypes = NativeStackScreenProps<RootStackParamList, Routes>;
 
@@ -58,33 +64,22 @@ const validation = Yup.object().shape({
   moodInput: Yup.string().min(10).required('Mood input is required'),
 });
 
+const emojis: any[] = ['😞', '😑', '😁']
+
 const MoodEntry = ({ navigation }: propTypes) => {
   const isDarkMode = useTheme();
   const [sliderState, setSliderState] = useState(1.5);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [selectedIndex, setSelectedIndex] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [response, setResponse] = useState<{ visible: boolean, response: string }>({ visible: false, response: 'Normal' })
 
   // Shared animation value
   const moodValue = useSharedValue(1.5);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: true,
-      title: '',
-      headerLeft: () => (
-        <TouchableOpacity
-          style={styles.headerBtn}
-          onPress={() => navigation.goBack()}
-        >
-          <ChevronLeft
-            size={20}
-            color={
-              isDarkMode
-                ? Theme.darkTheme.colors.text
-                : Theme.lightTheme.colors.text
-            }
-          />
-        </TouchableOpacity>
-      ),
+      headerShown: false
     });
   }, []);
 
@@ -178,80 +173,77 @@ const MoodEntry = ({ navigation }: propTypes) => {
   // ---------------- SUBMIT ----------------
   const addMoodEntry = async (content: AddMoodRequest) => {
     const moodService = new MoodService();
-    return moodService.addMood(content);
+    setLoading(false)
+    const response = await moodService.addMood(content);
+    console.log(response.data)
+    setResponse({ visible: true, response: response.data?.prediction })
+    return response;
   };
 
   const { mutate } = useMutation({ mutationFn: addMoodEntry });
 
   const handleAddingMood = (values: { moodInput: string }) => {
-    mutate({
-      level: moodValue.value,
-      description:
-        moodValue.value === 0
-          ? 'sad'
-          : moodValue.value <= 1.5
-          ? 'neutral'
-          : 'happy',
-      notes: values.moodInput,
-    });
+    setLoading(true)
 
-    useStore(state => {
-      (state as StateType).loading = true;
-    });
+    const payload = {
+      level: 5,
+      description: selectedIndex === 0 ? 'sad' : selectedIndex === 1 ? 'neutral' : 'happy',
+      notes: values.moodInput
+    }
+
+    mutate(payload)
   };
 
   return (
-    <AppContainer>
+    <AppContainer isLoading={loading}>
       <AppText
         text="How are you feeling today?"
         textStyle={styles(isDarkMode).title}
         fontSize={14}
       />
 
+      <AppSpacer
+        isVertical
+        size={Constants.SPACE_MEDIUM} />
+
       {/* EMOJI CONTAINER */}
-      <Animated.View
-        style={[styles(isDarkMode).emojiContainer, backgroundStyle]}
-        onLayout={onLayout}
-      >
-        <Animated.View style={[styles.emojiWrapper, emojiContainerStyle]}>
-          <Animated.Text
-            style={[styles.emoji, { fontSize: emojiSize }, sadOpacity]}
-          >
-            😢
-          </Animated.Text>
+      <View>
+        <ScrollView
+          contentContainerStyle={{
+            width: "100%",
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'flex-start',
+          }}
+          horizontal
+          showsHorizontalScrollIndicator={false}>
+          {emojis.map((item, index) => {
+            return (
+              <Pressable
+                key={index}
+                style={{
+                  ...styles(isDarkMode).emojiContainer,
+                  marginRight: index != emojis.length - 1 ? Constants.SPACE_SMALL : 0,
+                  borderWidth: selectedIndex === index ? 5 : 1,
+                  borderColor: selectedIndex === index ? Colors.primary : Colors.neutral60,
+                }}
+                onPress={() => setSelectedIndex(index)}>
+                <AppText
+                  text={item}
+                  fontSize={30} />
+              </Pressable>
+            )
+          })}
+        </ScrollView>
+      </View>
 
-          <Animated.Text
-            style={[styles.emoji, { fontSize: emojiSize }, neutralOpacity]}
-          >
-            😐
-          </Animated.Text>
-
-          <Animated.Text
-            style={[styles.emoji, { fontSize: emojiSize }, happyOpacity]}
-          >
-            😄
-          </Animated.Text>
-        </Animated.View>
-      </Animated.View>
-
-      {/* SLIDER */}
-      <Slider
-        style={styles.slider}
-        value={sliderState}
-        onValueChange={handleSliderChange}
-        minimumValue={0}
-        maximumValue={3}
-        minimumTrackTintColor={Colors.primaryCore}
-        maximumTrackTintColor={Colors.neutral80}
-        thumbTintColor={Colors.primaryCore}
-      />
 
       {/* FORM */}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <AppForm
-          initialValues={{ moodInput: '' }}
+          initialValues={{ moodInput: 'i feel really good today' }}
           validationSchema={validation}
           onSubmit={handleAddingMood}
         >
@@ -262,6 +254,28 @@ const MoodEntry = ({ navigation }: propTypes) => {
           <AppFormButton label="Submit" isPrimary />
         </AppForm>
       </KeyboardAvoidingView>
+
+
+      <Modal
+        animationType='slide'
+        visible={response?.visible}>
+        <View style={styles(isDarkMode).modalContainer}>
+          <AppText
+            text={`It seems currently you are having a \n ${response?.response}`}
+            fontSize={13}
+            textStyle={styles(isDarkMode).response} />
+
+          <View style={styles(isDarkMode).buttonContainer}>
+            <TouchableOpacity style={styles(isDarkMode).primaryButton}
+              onPress={() => setResponse({ ...response, visible: false })}>
+              <AppText
+                text="Cancel"
+                fontSize={12} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
     </AppContainer>
   );
 };
@@ -282,7 +296,8 @@ const styles = (isDarkMode: boolean) =>
         : Theme.lightTheme.colors.text,
     },
     emojiContainer: {
-      flex: 1,
+      width: 100,
+      height: 100,
       borderWidth: 1,
       borderRadius: Constants.SPACE_MEDIUM,
       borderColor: Colors.neutral80,
@@ -303,6 +318,37 @@ const styles = (isDarkMode: boolean) =>
       alignSelf: 'center',
       height: 40,
     },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    response: {
+      fontFamily: 'poppins_regular',
+      textAlign: 'center'
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+
+    },
+    cancelButton: {
+      backgroundColor: Theme.darkTheme.colors.error,
+      paddingVertical: Constants.SPACE_MEDIUM,
+      paddingHorizontal: Constants.SPACE_LARGE,
+      borderRadius: 10
+    },
+    primaryButton: {
+      backgroundColor: Colors.primaryCore,
+      paddingVertical: Constants.SPACE_MEDIUM,
+      paddingHorizontal: Constants.SPACE_LARGE,
+      borderRadius: 10
+    },
+    buttonText: {
+      fontFamily: 'poppins_medium',
+      color: 'white'
+    }
   });
 
 export default MoodEntry;

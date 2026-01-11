@@ -18,7 +18,9 @@ type SettingsParams = {}
 
 type MoodEntryParams = {}
 
-type ResourcesParams = {}
+type ResourcesParams = {
+  id: string | null
+}
 
 type ResourceDetailsParams = {
   id: string

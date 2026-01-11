@@ -20,11 +20,12 @@ import { AssessmentCard, DeviceCard, WelcomeHeader } from './widgets'
 import { CategoryService } from '../../services'
 
 // models
-import { Category } from '../../data/models'
+import { Category, Resource } from '../../data/models'
 
 // navigation
 import { RootStackParamList } from '../../navigation/RootStackParamList'
 import { Routes } from '../../navigation'
+import getRandomItems from '../../data/resources'
 
 const SIZE = 80
 
@@ -133,6 +134,20 @@ const HomePage = ({ navigation }: propTypes) => {
                     showsHorizontalScrollIndicator={false} />
             </View>
             <AppSpacer size={Constants.SPACE_MEDIUM} />
+
+            <SubTitle title='Recent' onPress={() => navigation.navigate(Routes.resources, {})} />
+            <AppSpacer size={Constants.SPACE_MEDIUM} />
+
+            {getRandomItems().map((item: Resource, index) => {
+                return (
+                    <AppText
+                        text={item.title}
+                        fontSize={11}
+                        textStyle={{
+                            fontFamily: 'poppins_regular'
+                        }} />
+                )
+            })}
 
         </AppContainer>
     )

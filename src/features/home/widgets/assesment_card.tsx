@@ -35,11 +35,11 @@ const AssessmentCard = ({ title, buttonTitle, backgroundColor = Colors.primaryCo
 
                 <AppSpacer size={Constants.SPACE_SMALL} />
 
-                <AppButton
+                {/*  <AppButton
                     label={buttonTitle}
                     onPress={() => onPress()}
                     buttonStyle={styles(isDarkMode).buttonStyle}
-                    labelStyle={styles(isDarkMode).labelStyle} />
+                    labelStyle={styles(isDarkMode).labelStyle} /> */}
             </View>
 
             {/* image */}

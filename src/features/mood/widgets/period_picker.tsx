@@ -1,41 +1,42 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { ChevronDown } from 'lucide-react-native'
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity, Pressable } from 'react-native';
+import { ChevronDown, LucideFilter } from 'lucide-react-native';
+import {Calendar} from 'react-native-calendars'
 
 // components
-import { AppText } from '../../../components'
+import { AppText } from '../../../components';
 
 // shared
-import { Theme, Colors, Constants } from '../../../shared'
+import { Colors, Constants } from '../../../shared';
 
 // hooks
-import { useTheme } from '../../../hooks'
+import { useTheme } from '../../../hooks';
 
 const PeriodPicker = () => {
-    const isDarkMode = useTheme()
+  const isDarkMode = useTheme();
 
-    return (
-        <View style={styles(isDarkMode).container}>
-            <AppText text='Weekly' fontSize={11} textStyle={styles(isDarkMode).title} />
-            <ChevronDown />
-        </View>
-    )
-}
+  return (
+     <Pressable>
+       <LucideFilter/>
+     </Pressable>
+  );
+};
 
-const styles = (isDarkMode: boolean) => StyleSheet.create({
+const styles = (isDarkMode: boolean) =>
+  StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderWidth: 2,
-        borderColor: Colors.primaryCore,
-        paddingVertical: Constants.SPACE_SMALL,
-        paddingHorizontal: Constants.SPACE_MEDIUM,
-        borderRadius: Constants.SPACE_LARGE
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderWidth: 2,
+      borderColor: Colors.primaryCore,
+      paddingVertical: Constants.SPACE_SMALL,
+      paddingHorizontal: Constants.SPACE_MEDIUM,
+      borderRadius: Constants.SPACE_LARGE,
     },
     title: {
-        fontFamily: 'poppins_medium'
-    }
-})
+      fontFamily: 'poppins_medium',
+    },
+  });
 
-export default PeriodPicker
+export default PeriodPicker;

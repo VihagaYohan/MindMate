@@ -35,9 +35,11 @@ const ResouceCard = ({ item }: propTypes) => {
 
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate(Routes.resourceDetails, {
-                id: item._id
-            })}
+            onPress={() => {
+                navigation.navigate(Routes.resourceDetails, {
+                    id: item._id
+                })
+            }}
             style={styles(isDarkMode).itemContainer}>
             <View style={styles(isDarkMode).thumbanilImageContainer}>
                 <Image

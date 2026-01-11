@@ -16,12 +16,13 @@ class ResourcesService {
   }
 
   // get all resources
-  getResources = async (): Promise<
+  getResources = async (categoryId: string | null): Promise<
     ServerResponse<ListResponse<Resource>> | ServerResponse<ErrorResponse>
   > => {
     try {
+      console.log(categoryId)
       const result: AxiosResponse<ListResponse<Resource>> = await ApiClient({
-        url: this.endpoint.resources,
+        url: categoryId != null ? `${this.endpoint.resources}/category?categoryId=${categoryId}` : this.endpoint.resources,
         method: 'get',
       });
 

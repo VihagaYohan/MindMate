@@ -57,6 +57,7 @@ const ResourceDetailsPage = () => {
     const fetchResource = async () => {
         const resourceService = new ResourcesService
         const result = await resourceService.getResourceById(route.params.id)
+        console.log(result)
 
         return result
     }

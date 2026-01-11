@@ -28,7 +28,7 @@ class MoodService {
   ): Promise<ServerResponse<Mood> | ServerResponse<ErrorResponse>> => {
     try {
       const result: AxiosResponse<ServerResponse<Mood>> = await ApiClient({
-        url: this.endpoint.register,
+        url: this.endpoint.moods,
         method: 'post',
         data: request,
       });
@@ -110,7 +110,7 @@ class MoodService {
   };
 
   // get graph data for selected date
-  getGraphData = async(
+  getGraphData = async (
     selectedDate: string = new Date().toString()):
     Promise<ServerResponse<GraphData> | ServerResponse<ErrorResponse>> => {
     try {
@@ -119,7 +119,7 @@ class MoodService {
         method: 'get'
       })
 
-      if(result.status === 200) {
+      if (result.status === 200) {
         return new ServerResponse<GraphData>(
           true,
           "User mood stats fetched successfully",
@@ -129,13 +129,13 @@ class MoodService {
       return new ServerResponse<ErrorResponse>(
         false,
         "Unable to retreive user mood stats",
-        {message: '', statusCode: 400}
+        { message: '', statusCode: 400 }
       )
-    } catch(e) {
+    } catch (e) {
       return new ServerResponse<ErrorResponse>(
         false,
         "Unable to retrieve user mood stats",
-        {message: (e as Error).message || String(e), statusCode: 500},
+        { message: (e as Error).message || String(e), statusCode: 500 },
         500
       )
     }

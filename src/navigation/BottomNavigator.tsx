@@ -8,7 +8,7 @@ import { AppText } from '../components';
 import { Routes, CustomBottomTab } from './';
 
 // page
-import { HomePage, JournalPage, MoodPage, SettingsPage } from '../features';
+import { HomePage, JournalPage, MoodEntryPage, SettingsPage } from '../features';
 
 // icon
 import { House, Laugh, NotebookPen, UserRound } from 'lucide-react-native';
@@ -60,7 +60,7 @@ const RootBottomTab = () => {
 
       <Tab.Screen
         name={Routes.mood}
-        component={MoodPage}
+        component={MoodEntryPage}
       /*         options={{
                 headerShown: false,
                 tabBarIcon: ({ focused, color, size }) => (
