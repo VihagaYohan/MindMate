@@ -20,6 +20,7 @@ import {
   Constants,
   ErrorResponse,
   ServerResponse,
+  Storage,
   Theme,
 } from '../../shared';
 
@@ -29,6 +30,10 @@ import { useTheme } from '../../hooks';
 // model
 import { Profile } from '../../data/models';
 import { ProfileResponse } from '../../services/user';
+import { useNavigation } from '@react-navigation/native';
+
+// navigation
+import { Routes } from '../../navigation'
 
 interface optionType {
   iconName: string;
@@ -44,6 +49,7 @@ const SettingsPage = () => {
   const [error, setError] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile>();
   const isDarkMode: boolean = useTheme();
+  const navigation = useNavigation()
 
   useEffect(() => {
     fetchUserDetails();
@@ -67,6 +73,19 @@ const SettingsPage = () => {
       setLoading(false);
     }
   };
+
+  // handle log-out
+  const handleLogout = async () => {
+    try {
+      await Storage.removeAllData()
+
+      // navigate to log-in page
+      navigation.navigate(Routes.login, {})
+
+    } catch (e) {
+
+    }
+  }
 
   const OptionField = ({
     iconName,
@@ -118,6 +137,31 @@ const SettingsPage = () => {
     );
   };
 
+  interface InfoFieldProps {
+    label: string;
+    value: string;
+  }
+
+  const InfoField = ({ label, value }: InfoFieldProps) => {
+    return (
+      <View>
+        <AppText
+          text={label}
+          fontSize={10}
+          textStyle={{
+            fontFamily: 'poppins_medium'
+          }} />
+
+        <AppText
+          text={value}
+          fontSize={11}
+          textStyle={{
+            fontFamily: 'poppins_medium'
+          }} />
+      </View>
+    )
+  }
+
   if (error) {
     return (
       <AppContainer isLoading={false}>
@@ -156,29 +200,22 @@ const SettingsPage = () => {
 
           <AppSpacer isVertical size={Constants.SPACE_MEDIUM} />
 
-          <AppButton
-            isPrimary
-            label="Edit Profile"
-            onPress={() => console.log('edit profile')}
-            buttonStyle={{
-              borderRadius: Constants.SPACE_MEDIUM,
-            }}
-          />
+
         </View>
       </View>
 
       <AppSpacer isVertical size={Constants.SPACE_LARGE} />
 
-      <OptionField
-        iconName="Heart"
-        label="Favorites"
-        onPress={() => console.log('')}
-      />
+      <InfoField label="Date of birth" value={new Date(profile?.birthDate).toLocaleDateString()} />
+
+      <AppSpacer isVertical size={Constants.SPACE_MEDIUM} />
+
+      <InfoField label="Gender" value={profile?.gender.toUpperCase().toString()} />
 
       <OptionField
         iconName="LogOut"
         label="Log out"
-        onPress={() => console.log('')}
+        onPress={() => handleLogout()}
         isLastItem
       />
     </AppContainer>
