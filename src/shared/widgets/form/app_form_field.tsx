@@ -21,6 +21,7 @@ interface propTypes {
     inputMode?: string
     placeholder?: string
     secureTextEntry?: boolean
+    multiline?: boolean
 }
 
 const AppFormField = ({
@@ -29,6 +30,7 @@ const AppFormField = ({
     inputMode = "default",
     secureTextEntry = false,
     placeholder,
+    multiline,
     ...otherProps }: propTypes) => {
 
     const { setFieldTouched, setFieldValue, handleChange, errors, touched, values } = useFormikContext()
@@ -51,6 +53,7 @@ const AppFormField = ({
                 onChangeText={handleChange(name)}
                 value={(values as Record<string, any>)?.[name]?.toString() ?? ''}
                 secureTextEntry={secureTextEntry}
+                multiline
                 {...otherProps} />
 
 

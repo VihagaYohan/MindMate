@@ -4,6 +4,7 @@ class Mood {
     level: string
     description: string
     notes: string
+    prediction: string
     isActive: boolean
     createdAt: string
     updatedAt: string
@@ -14,6 +15,7 @@ class Mood {
         level: string,
         description: string,
         notes: string,
+        prediction: string,
         isActive: boolean,
         createdAt: string,
         updatedAt: string
@@ -23,6 +25,7 @@ class Mood {
         this.level = level
         this.description = description
         this.notes = notes
+        this.prediction = prediction
         this.isActive = isActive
         this.createdAt = createdAt
         this.updatedAt = updatedAt

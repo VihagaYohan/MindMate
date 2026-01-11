@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState, useEffect } from 'react';
 import {
   KeyboardAvoidingView,
   LayoutChangeEvent,
@@ -44,7 +44,7 @@ import {
 import { useTheme } from '../../../hooks';
 
 // service
-import { MoodService } from '../../../services';
+import { ErrorResponse, MoodService, CategoryService } from '../../../services';
 
 // models
 import { AddMoodRequest } from '../../../services/moods';
@@ -55,7 +55,7 @@ import { Routes } from '../../../navigation';
 
 // store
 import { StateType, useStore } from '../../../store';
-import { Mood } from '../../../data/models';
+import { Mood, Category } from '../../../data/models';
 
 type propTypes = NativeStackScreenProps<RootStackParamList, Routes>;
 
@@ -68,14 +68,10 @@ const emojis: any[] = ['😞', '😑', '😁']
 
 const MoodEntry = ({ navigation }: propTypes) => {
   const isDarkMode = useTheme();
-  const [sliderState, setSliderState] = useState(1.5);
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
-  const [response, setResponse] = useState<{ visible: boolean, response: string }>({ visible: false, response: 'Normal' })
-
-  // Shared animation value
-  const moodValue = useSharedValue(1.5);
+  const [response, setResponse] = useState<{ visible: boolean, prediction: string }>({ visible: false, prediction: 'Normal' })
+  const [categories, setCategories] = useState<Category[]>()
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -83,92 +79,9 @@ const MoodEntry = ({ navigation }: propTypes) => {
     });
   }, []);
 
-  // ---------------- BACKGROUND COLOR ----------------
-  const backgroundStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      moodValue.value,
-      [0, 1.5, 3],
-      ['#ce5a3d', '#a3a39a', '#18e06c'],
-    ),
-  }));
-
-  const onLayout = useCallback((event: LayoutChangeEvent) => {
-    const { width, height } = event.nativeEvent.layout;
-    setContainerSize({ width, height });
-  }, []);
-
-  // Emoji size
-  const emojiSize = containerSize.width ? containerSize.width / 1.3 : 120;
-
-  // Calculate offset for horizontal movement
-  const maxOffset = containerSize.width ? containerSize.width / 3 : 100;
-
-  // ---------------- ENHANCEMENTS ----------------
-  const scale = useSharedValue(1);
-  const rotation = useSharedValue(0);
-  const shake = useSharedValue(0);
-
-  const triggerEnhancements = (value: number) => {
-    // Bounce
-    scale.value = withSequence(withSpring(1.15), withSpring(1));
-
-    // Rotate
-    rotation.value = withTiming(value === 0 ? -10 : value === 3 ? 10 : 0, {
-      duration: 300,
-    });
-
-    // Shake only when sad
-    if (value === 0) {
-      shake.value = withSequence(
-        withTiming(-10, { duration: 60 }),
-        withTiming(10, { duration: 60 }),
-        withTiming(-6, { duration: 60 }),
-        withTiming(6, { duration: 60 }),
-        withTiming(0, { duration: 60 }),
-      );
-    } else {
-      shake.value = 0;
-    }
-  };
-
-  // ---------------- EMOJI STYLES ----------------
-  const emojiContainerStyle = useAnimatedStyle(() => ({
-    transform: [
-      // Horizontal sliding based on mood value
-      {
-        translateX: interpolate(
-          moodValue.value,
-          [0, 1.5, 3],
-          [-maxOffset, 0, maxOffset],
-        ),
-      },
-      // Bounce scale
-      { scale: scale.value },
-      // Shake for sad
-      { translateX: shake.value },
-      // Rotate
-      { rotate: `${rotation.value}deg` },
-    ],
-  }));
-
-  const sadOpacity = useAnimatedStyle(() => ({
-    opacity: interpolate(moodValue.value, [0, 1], [1, 0]),
-  }));
-
-  const neutralOpacity = useAnimatedStyle(() => ({
-    opacity: interpolate(moodValue.value, [0.8, 1.5, 2.2], [0, 1, 0]),
-  }));
-
-  const happyOpacity = useAnimatedStyle(() => ({
-    opacity: interpolate(moodValue.value, [2, 3], [0, 1]),
-  }));
-
-  // ---------------- SLIDER ----------------
-  const handleSliderChange = (value: number) => {
-    setSliderState(value);
-    moodValue.value = withTiming(value, { duration: 300 });
-    triggerEnhancements(value);
-  };
+  useEffect(() => {
+    fetchCategories()
+  }, [])
 
   // ---------------- SUBMIT ----------------
   const addMoodEntry = async (content: AddMoodRequest) => {
@@ -182,7 +95,20 @@ const MoodEntry = ({ navigation }: propTypes) => {
 
   const { mutate } = useMutation({ mutationFn: addMoodEntry });
 
-  const handleAddingMood = (values: { moodInput: string }) => {
+  // fetch resource categories
+  const fetchCategories = async () => {
+    const categoryService = new CategoryService
+    const result = await categoryService.getServices()
+
+    const { data } = result.data
+    const response = data.data
+
+    console.log(response)
+
+    setCategories(response)
+  }
+  // add mood entry
+  const handleAddingMood = async (values: { moodInput: string }) => {
     setLoading(true)
 
     const payload = {
@@ -191,8 +117,35 @@ const MoodEntry = ({ navigation }: propTypes) => {
       notes: values.moodInput
     }
 
-    mutate(payload)
+    try {
+      const moodService = new MoodService()
+      const response: ServerResponse<Mood | ErrorResponse> = await moodService.addMood(payload)
+
+      const result: Mood | ErrorResponse = response.data
+
+      setResponse({
+        visible: true,
+        prediction: result?.prediction
+      })
+
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setLoading(false)
+    }
   };
+
+  // get category id based on prediction
+  const getCategory = (prediction: string) => {
+    const categoryId = categories?.map((item) => {
+      if (item.title === prediction) {
+        return item._id
+      } return categories[0]._id
+    })
+
+    console.log('category id ' + categoryId)
+    return categoryId
+  }
 
   return (
     <AppContainer isLoading={loading}>
@@ -243,11 +196,12 @@ const MoodEntry = ({ navigation }: propTypes) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <AppForm
-          initialValues={{ moodInput: 'i feel really good today' }}
+          initialValues={{ moodInput: 'i have lots of work and lots of stress at the moment, i dont know how to deal with it, and there is no one for me to talk to' }}
           validationSchema={validation}
           onSubmit={handleAddingMood}
         >
-          <AppFormField name="moodInput" placeholder="Type what you feel" />
+          <AppFormField name="moodInput" placeholder="Type what you feel" label={''}
+            multiline={true} />
 
           <AppSpacer size={Constants.SPACE_MEDIUM} />
 
@@ -261,16 +215,44 @@ const MoodEntry = ({ navigation }: propTypes) => {
         visible={response?.visible}>
         <View style={styles(isDarkMode).modalContainer}>
           <AppText
-            text={`It seems currently you are having a \n ${response?.response}`}
+            text={`It seems currently you are having a \n ${response.prediction} thoughts.`}
             fontSize={13}
             textStyle={styles(isDarkMode).response} />
 
+          <AppSpacer
+            isVertical
+            size={Constants.SPACE_SMALL} />
+
+          {response.prediction != 'Normal' && (
+            <AppText
+              text='Would you like to view resources'
+              fontSize={11}
+              textStyle={{
+                fontFamily: 'poppins_medium'
+              }} />
+          )}
+
           <View style={styles(isDarkMode).buttonContainer}>
-            <TouchableOpacity style={styles(isDarkMode).primaryButton}
+            <TouchableOpacity style={styles(isDarkMode).secondaryButton}
               onPress={() => setResponse({ ...response, visible: false })}>
               <AppText
                 text="Cancel"
-                fontSize={12} />
+                fontSize={12}
+                textStyle={{ fontFamily: 'poppins_medium', color: Theme.darkTheme.colors.error }} />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles(isDarkMode).primaryButton}
+              onPress={() => {
+                // hide modal
+                setResponse({ ...response, visible: false })
+
+                // navigate to resource page with respective category
+                navigation.navigate(Routes.resources, {})
+              }}>
+              <AppText
+                text="View"
+                fontSize={12}
+                textStyle={{ fontFamily: 'poppins_medium', color: 'white' }} />
             </TouchableOpacity>
           </View>
         </View>
@@ -330,8 +312,8 @@ const styles = (isDarkMode: boolean) =>
     buttonContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center'
-
+      alignItems: 'center',
+      paddingVertical: Constants.SPACE_MEDIUM
     },
     cancelButton: {
       backgroundColor: Theme.darkTheme.colors.error,
@@ -343,7 +325,11 @@ const styles = (isDarkMode: boolean) =>
       backgroundColor: Colors.primaryCore,
       paddingVertical: Constants.SPACE_MEDIUM,
       paddingHorizontal: Constants.SPACE_LARGE,
-      borderRadius: 10
+      borderRadius: 10,
+      marginLeft: Constants.SPACE_MEDIUM
+    },
+    secondaryButton: {
+
     },
     buttonText: {
       fontFamily: 'poppins_medium',
