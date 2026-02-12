@@ -116,6 +116,9 @@ const RootBottomTab = () => {
       <Tab.Screen
         name={Routes.settings}
         component={SettingsPage}
+        options={{
+          title: "Profile"
+        }}
       /*         options={{
                 tabBarIcon: ({ focused, color, size }) => (
                   <View

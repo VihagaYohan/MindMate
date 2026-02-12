@@ -212,10 +212,12 @@ const MoodEntry = ({ navigation }: propTypes) => {
 
       <Modal
         animationType='slide'
-        visible={response?.visible}>
+        visible={response?.visible}
+        transparent={false}
+      >
         <View style={styles(isDarkMode).modalContainer}>
           <AppText
-            text={`It seems currently you are having a \n ${response.prediction} thoughts.`}
+            text={`It seems currently you are having a \n depression thoughts.`}
             fontSize={13}
             textStyle={styles(isDarkMode).response} />
 
@@ -304,6 +306,7 @@ const styles = (isDarkMode: boolean) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      //backgroundColor: 'rgba(0, 0, 0, 0.95) '
     },
     response: {
       fontFamily: 'poppins_regular',
